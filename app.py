@@ -1,8 +1,11 @@
+import os
+
+os.environ['TF_USE_LEGACY_KERAS'] = '1'
+
 import streamlit as st
 from PIL import Image, ImageOps
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.models import load_model
 import time
 
 # ---------------------------------------------------------
@@ -106,19 +109,17 @@ def inject_custom_css(direction):
     """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# 4. منطق الذكاء الاصطناعي (حل مشكلة Deserialization)
+# 4. منطق الذكاء الاصطناعي
 # ---------------------------------------------------------
 @st.cache_resource
 def load_teachable_machine_model():
-    # استخدام compile=False يحل مشكلة تعارض الكلمات المفتاحية مثل 'groups' في بعض الإصدارات
-    model = load_model('keras_model.h5', compile=False)
-    return model
+    # استخدام h5py لفتح الملف بمرونة وتجاوز تعارض الكلاسات
+    return tf.keras.models.load_model('keras_model.h5', compile=False)
 
 def process_and_predict(image_data, model):
     size = (224, 224)
     image = ImageOps.fit(image_data, size, Image.Resampling.LANCZOS)
     img_array = np.asarray(image).astype(np.float32)
-    # التحويل لمصفوفة رباعية وتطبيع البيانات
     normalized_image_array = (img_array / 127.5) - 1.0
     data = np.expand_dims(normalized_image_array, axis=0)
     prediction = model.predict(data)
@@ -164,6 +165,7 @@ with col2:
                     index = np.argmax(prediction)
                     confidence = prediction[0][index]
                 
+                # افتراض: Index 0 هو Normal و Index 1 هو Tumor
                 is_tumor = (index == 1) 
                 
                 st.markdown(f"<div class='report-container'>", unsafe_allow_html=True)
@@ -184,6 +186,6 @@ with col2:
                 st.markdown("</div>", unsafe_allow_html=True)
                 
         except Exception as e:
-            st.error(f"Error: {e}")
+            st.error(f"Error Processing: {e}")
 
 st.markdown(f"<div class='footer'>Developed by Oussama SEBROU</div>", unsafe_allow_html=True)
