@@ -1,0 +1,2 @@
+0 No Tumor in Brain Scan
+1 Yes Have a Tumor in Brain Scan
