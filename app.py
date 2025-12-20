@@ -1,298 +1,271 @@
 import streamlit as st
+import tensorflow.keras
 from PIL import Image, ImageOps
 import numpy as np
-import tensorflow as tf
+import io
+import os
 
-# -----------------------------------------------------------------------------
-# Configuration & Setup
-# -----------------------------------------------------------------------------
-st.set_page_config(
-    page_title="AI Neuro Diagnosis",
-    page_icon="🧠",
-    layout="centered",
-    initial_sidebar_state="expanded"
-)
+# --- Configuration ---
+MODEL_PATH = "keras_model.h5"
+LABELS_PATH = "labels.txt"
+IMAGE_SIZE = (224, 224)
+CONFIDENCE_THRESHOLD = 0.7
 
-# Hide standard Streamlit branding for a more professional look
-hide_st_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            header {visibility: hidden;}
-            </style>
-            """
-st.markdown(hide_st_style, unsafe_allow_html=True)
-
-# -----------------------------------------------------------------------------
-# Custom CSS for Styling (Modern & Medical Theme)
-# -----------------------------------------------------------------------------
-def load_css(lang_code):
-    """
-    Load custom CSS based on language selection.
-    Handles RTL for Arabic and LTR for English.
-    """
-    align = "right" if lang_code == "ar" else "left"
-    direction = "rtl" if lang_code == "ar" else "ltr"
-    
-    st.markdown(f"""
-    <style>
-        .main {{
-            background-color: #f8f9fa;
-        }}
-        .report-container {{
-            background-color: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            direction: {direction};
-            text-align: {align};
-            margin-top: 20px;
-            border-left: 5px solid #2c3e50;
-        }}
-        .stButton>button {{
-            width: 100%;
-            border-radius: 8px;
-            height: 3em;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            font-weight: bold;
-        }}
-        .stButton>button:hover {{
-            background-color: #0056b3;
-        }}
-        h1, h2, h3 {{
-            color: #2c3e50;
-            text-align: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }}
-        .medical-alert {{
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            font-size: 1.1em;
-            line-height: 1.6;
-        }}
-        .alert-positive {{
-            background-color: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeeba;
-        }}
-        .alert-negative {{
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }}
-        .sidebar-text {{
-            font-size: 1.2em;
-            font-weight: bold;
-        }}
-    </style>
-    """, unsafe_allow_html=True)
-
-# -----------------------------------------------------------------------------
-# Text Assets & Translations
-# -----------------------------------------------------------------------------
-TEXTS = {
-    "ar": {
-        "title": "نظام التشخيص الإشعاعي الذكي",
-        "subtitle": "تحليل صور الرنين المغناطيسي (MRI) باستخدام الذكاء الاصطناعي",
-        "sidebar_title": "الإعدادات",
-        "choose_source": "اختر طريقة الفحص",
-        "camera": "كاميرا مباشرة",
-        "upload": "رفع صورة",
-        "camera_label": "التقط صورة للأشعة",
-        "upload_label": "ارفع صورة الأشعة هنا (JPG, PNG)",
-        "analyze_btn": "بدء التحليل الطبي",
-        "error_no_img": "الرجاء رفع صورة أو التقاطها أولاً.",
-        "error_not_mri": "تنبيه: الصورة المدخلة لا تبدو كصورة رنين مغناطيسي للدماغ. يرجى التأكد من جودة الصورة.",
-        "result_title": "التقرير الطبي",
-        "confidence": "نسبة التأكد:",
-        # Positive Case (Tumor Found)
-        "msg_positive_header": "⚠️ نتيجة التحليل المبدئي",
-        "msg_positive_body": """
-        أفهم تماماً حجم القلق الذي تشعر به الآن، والصراحة المهنية تقتضي أن أخبرك بوجود نمو غير طبيعي تظهره الصور، مما يتطلب تحركاً طبياً دقيقاً.
-        
-        لذلك، سنوجهك إلى فريق مختص يجب أن تتابع معه فوراً، يضم نخبة من جراحي الأعصاب وأطباء الأورام لوضع الخطة العلاجية الأنسب لحالتك.
-        
-        أطمئنك بأن العلم الحديث حقق قفزات مذهلة في هذا المجال، ونحن معك خطوة بخطوة لدعمك طبياً ونفسياً. ثق بأن تشخيصنا المبكر هو أول طريق التعافي، وقوتك النفسية ستكون المحرك الأساسي لنجاح رحلة العلاج بإذن الله.
-        """,
-        # Negative Case (No Tumor)
-        "msg_negative_header": "✅ نتيجة مطمئنة",
-        "msg_negative_body": """
-        أهنئك من كل قلبي، فنتائج الأشعة والتحاليل جاءت مطمئنة تماماً ولا تظهر أي وجود لورم كما كنت تخشى.
-        
-        الصداع أو الأعراض التي كنت تشعر بها لها أسباب أخرى أبسط بكثير، وسنعمل معاً على معالجتها بهدوء. سنوجهك إلى فريق مختص يجب أن تتابع معه للتأكد من سلامة الجيوب الأنفية أو النظر أو ربما ضغوط الحياة اليومية، لضمان راحتك التامة.
-        
-        عد إلى منزلك وأنت مرتاح البال، فصحتك بخير وهذا هو الخبر الأجمل اليوم.
-        """
-    },
+# --- Internationalization (i18n) Messages ---
+MESSAGES = {
     "en": {
-        "title": "AI Neuro-Radiology System",
-        "subtitle": "Brain MRI Analysis powered by Artificial Intelligence",
-        "sidebar_title": "Settings",
-        "choose_source": "Select Input Source",
-        "camera": "Live Camera",
-        "upload": "Upload Image",
-        "camera_label": "Capture MRI Scan",
-        "upload_label": "Upload MRI Image (JPG, PNG)",
-        "analyze_btn": "Start Medical Analysis",
-        "error_no_img": "Please upload or capture an image first.",
-        "error_not_mri": "Warning: The input image does not appear to be a clear Brain MRI. Please ensure image quality.",
-        "result_title": "Medical Report",
-        "confidence": "Confidence Score:",
-        # Positive Case (Translation of the Arabic sentiment)
-        "msg_positive_header": "⚠️ Analysis Result: Attention Required",
-        "msg_positive_body": """
-        I completely understand the anxiety you might be feeling right now. Professional honesty requires me to inform you that the scans show abnormal growth, which requires precise medical attention.
-        
-        Therefore, we advise you to consult immediately with a specialized team of neurosurgeons and oncologists to develop the most appropriate treatment plan.
-        
-        Rest assured that modern science has made amazing leaps in this field, and we are with you step by step. Trust that early diagnosis is the first step to recovery, and your psychological strength will be the main driver for the success of the treatment journey.
-        """,
-        # Negative Case (Translation of the Arabic sentiment)
-        "msg_negative_header": "✅ Reassuring Result",
-        "msg_negative_body": """
-        I congratulate you from the bottom of my heart. The scan results are completely reassuring and do not show any presence of a tumor as you feared.
-        
-        The headaches or symptoms you were feeling likely have much simpler causes. We recommend checking with specialists regarding sinus health, vision, or daily stress factors to ensure your complete comfort.
-        
-        Go home with peace of mind; your health is fine, and that is the best news today.
-        """
+        "title": "Brain Tumor Detection (AI-Powered)",
+        "sidebar_title": "Settings & Input",
+        "language_label": "Select Language",
+        "upload_tab": "Upload Image",
+        "camera_tab": "Live Camera",
+        "upload_help": "Upload a brain MRI image (JPG, PNG, JPEG)",
+        "camera_button": "Capture Image",
+        "processing": "Processing image...",
+        "no_file": "Please upload an image or capture one from the camera.",
+        "error_unclear": "Image unclear or not an MRI scan. Please upload a clear brain MRI.",
+        "result_header": "Analysis Result",
+        "result_yes_title": "Anomaly Detected",
+        "result_yes_text": "We have detected an anomaly. Please consult a specialist immediately. Early detection is key to successful treatment. We recommend contacting a neurosurgeon or oncologist.",
+        "result_no_title": "Scan Clear",
+        "result_no_text": "Great news! The scan looks clear. No tumor detected. The symptoms you are experiencing may be due to other, less serious causes. Please follow up with your primary care physician for a comprehensive check-up.",
+        "developer_credit": "Developed by **Oussama SEBROU**",
+    },
+    "ar": {
+        "title": "كشف أورام الدماغ (مدعوم بالذكاء الاصطناعي)",
+        "sidebar_title": "الإعدادات والإدخال",
+        "language_label": "اختر اللغة",
+        "upload_tab": "تحميل صورة",
+        "camera_tab": "الكاميرا المباشرة",
+        "upload_help": "قم بتحميل صورة رنين مغناطيسي (MRI) للدماغ (JPG, PNG, JPEG)",
+        "camera_button": "التقاط الصورة",
+        "processing": "جاري معالجة الصورة...",
+        "no_file": "الرجاء تحميل صورة أو التقاط واحدة من الكاميرا.",
+        "error_unclear": "الصورة غير واضحة أو ليست مسحاً بالرنين المغناطيسي. يرجى تحميل صورة واضحة.",
+        "result_header": "نتيجة التحليل",
+        "result_yes_title": "تم الكشف عن شذوذ",
+        "result_yes_text": "أفهم تماماً حجم القلق الذي تشعر به الآن، والصراحة المهنية تقتضي أن أخبرك بوجود نمو غير طبيعي تظهره الصور، مما يتطلب تحركاً طبياً دقيقاً. لذلك، سنوجهك إلى فريق مختص يجب أن تتابع معه فوراً، يضم نخبة من جراحي الأعصاب وأطباء الأورام لوضع الخطة العلاجية الأنسب لحالتك. أطمئنك بأن العلم الحديث حقق قفزات مذهلة في هذا المجال، ونحن معك خطوة بخطوة لدعمك طبياً ونفسياً. ثق بأن تشخيصنا المبكر هو أول طريق التعافي، وقوتك النفسية ستكون المحرك الأساسي لنجاح رحلة العلاج بإذن الله.",
+        "result_no_title": "المسح سليم",
+        "result_no_text": "أهنئك من كل قلبي، فنتائج الأشعة والتحاليل جاءت مطمئنة تماماً ولا تظهر أي وجود لورم كما كنت تخشى. الصداع أو الأعراض التي كنت تشعر بها لها أسباب أخرى أبسط بكثير، وسنعمل معاً على معالجتها بهدوء. سنوجهك إلى فريق مختص يجب أن تتابع معه للتأكد من سلامة الجيوب الأنفية أو النظر أو ربما ضغوط الحياة اليومية، لضمان راحتك التامة. عد إلى منزلك وأنت مرتاح البال، فصحتك بخير وهذا هو الخبر الأجمل اليوم.",
+        "developer_credit": "تم التطوير بواسطة **Oussama SEBROU**",
     }
 }
 
-# -----------------------------------------------------------------------------
-# Model Management
-# -----------------------------------------------------------------------------
-@st.cache_resource
-def load_tm_model():
-    """
-    Load the Keras model.
-    NOTE: Ensure 'keras_model.h5' is in the same directory.
-    This file is downloaded from Teachable Machine (Export -> Tensorflow -> Keras).
-    """
-    try:
-        # Load the model with compile=False for speed/safety if using custom layers
-        model = tf.keras.models.load_model('keras_model.h5', compile=False)
-        
-        # Load labels
-        with open('labels.txt', 'r') as f:
-            class_names = [line.strip() for line in f.readlines()]
-            
-        return model, class_names
-    except Exception as e:
-        st.error(f"Error loading model. Make sure 'keras_model.h5' and 'labels.txt' are in the directory. Error: {e}")
-        return None, None
+# --- Custom CSS for UI/UX and RTL Support ---
+CUSTOM_CSS = """
+<style>
+/* Hide Streamlit header/footer */
+#MainMenu, footer {visibility: hidden;}
 
-def process_and_predict(image, model):
-    """
-    Process image to match Teachable Machine's requirements:
-    1. Resize to 224x224
-    2. Normalize to [-1, 1] range
-    """
-    # Create the array of the right shape to feed into the keras model
-    data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
+/* Medical Blue/White Theme */
+.stApp {
+    background-color: #f0f2f6; /* Light background */
+    color: #1c1c1c; /* Dark text */
+}
+.st-emotion-cache-1cypcdb { /* Main content container */
+    max-width: 1000px;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin: auto; /* Center the content */
+}
+h1 {
+    color: #007bff; /* Medical Blue for titles */
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Developer Credit Footer */
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #e9ecef;
+    color: #6c757d;
+    text-align: center;
+    padding: 10px;
+    font-size: 0.8em;
+    border-top: 1px solid #dee2e6;
+    z-index: 1000; /* Ensure it's on top */
+}
+.footer strong {
+    color: #007bff;
+}
+
+/* RTL Support for Arabic */
+.rtl-text {
+    direction: rtl;
+    text-align: right;
+}
+/* Ensure sidebar elements are also styled for RTL when needed */
+.st-emotion-cache-1lcbmms { /* Target sidebar elements */
+    direction: rtl;
+    text-align: right;
+}
+</style>
+"""
+
+# --- Model Loading Function ---
+@st.cache_resource
+def load_model_and_labels():
+    """Loads the Keras model and labels file."""
+    try:
+        # Load the model
+        model = tensorflow.keras.models.load_model(MODEL_PATH, compile=False)
+        
+        # Load the labels
+        class_names = []
+        with open(LABELS_PATH, "r", encoding="utf-8") as f:
+            for line in f:
+                class_names.append(line.strip()[2:]) # Remove the "0 " or "1 " prefix
+        
+        return model, class_names
+    except FileNotFoundError:
+        st.error(f"Model files not found. Please ensure '{MODEL_PATH}' and '{LABELS_PATH}' are in the same directory as 'app.py'.")
+        st.stop()
+    except Exception as e:
+        st.error(f"An error occurred while loading the model: {e}")
+        st.stop()
+
+# --- Preprocessing Function ---
+def preprocess_image(image):
+    """Preprocesses the image for the model."""
+    # Resize the image to be at least 224x224 and then crop from the center
+    image = ImageOps.fit(image, IMAGE_SIZE, Image.Resampling.LANCZOS)
     
-    # Resize and crop
-    image = ImageOps.fit(image, (224, 224), Image.Resampling.LANCZOS)
-    
-    # Turn the image into a numpy array
+    # Convert the image to a numpy array
     image_array = np.asarray(image)
     
-    # Normalize the image
-    normalized_image_array = (image_array.astype(np.float32) / 127.5) - 1
+    # Normalize the image (Teachable Machine standard)
+    normalized_image_array = (image_array.astype(np.float32) / 127.0) - 1
     
-    # Load the image into the array
+    # Create the array of the right shape to feed into the Keras model
+    data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
     data[0] = normalized_image_array
+    
+    return data
+
+# --- Prediction Function ---
+def predict(image):
+    """Runs the prediction and returns the result."""
+    model, class_names = load_model_and_labels()
+    
+    # Preprocess
+    data = preprocess_image(image)
     
     # Predict
     prediction = model.predict(data)
     index = np.argmax(prediction)
-    score = prediction[0][index]
+    class_name = class_names[index]
+    confidence_score = prediction[0][index]
     
-    return index, score
+    return class_name, confidence_score
 
-# -----------------------------------------------------------------------------
-# Main Application Logic
-# -----------------------------------------------------------------------------
+# --- Main Application Logic ---
 def main():
-    # 1. Sidebar Language Selection
+    # Initialize session state for language if not set
+    if 'lang' not in st.session_state:
+        st.session_state.lang = 'en'
+
+    # Get the current language messages
+    lang = st.session_state.lang
+    msg = MESSAGES[lang]
+    
+    # Apply custom CSS
+    st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
+    
+    # --- Sidebar for Language Selection ---
     with st.sidebar:
-        st.image("https://cdn-icons-png.flaticon.com/512/3063/3063176.png", width=80) # Generic Medical Icon
-        lang_choice = st.selectbox("Language / اللغة", ["العربية", "English"])
-        lang = "ar" if lang_choice == "العربية" else "en"
+        st.title(msg["sidebar_title"], anchor=False)
         
-        st.markdown("---")
-        st.write("© 2024 Medical AI Solutions")
+        # Language selector
+        lang_option = st.radio(
+            msg["language_label"],
+            ("English", "العربية"),
+            index=0 if lang == 'en' else 1,
+            key="lang_selector",
+            horizontal=True,
+            on_change=lambda: st.session_state.update(lang='en' if st.session_state.lang_selector == 'English' else 'ar')
+        )
+        
+        # Re-run the app if language changes to update all text
+        if (lang == 'en' and lang_option == 'العربية') or (lang == 'ar' and lang_option == 'English'):
+            st.rerun()
+
+    # --- Main Content ---
+    st.title(msg["title"])
     
-    # Load CSS based on language
-    load_css(lang)
-    t = TEXTS[lang]
+    # Apply RTL class to main content if Arabic is selected
+    if lang == 'ar':
+        st.markdown('<div class="rtl-text">', unsafe_allow_html=True)
 
-    # 2. Header
-    st.title(t["title"])
-    st.subheader(t["subtitle"])
-    st.markdown("---")
-
-    # 3. Load Model
-    model, class_names = load_tm_model()
+    # Input Tabs
+    tab_upload, tab_camera = st.tabs([msg["upload_tab"], msg["camera_tab"]])
     
-    if model:
-        # 4. Input Method
-        input_method = st.radio(t["choose_source"], (t["camera"], t["upload"]), horizontal=True)
+    uploaded_file = None
+    
+    with tab_upload:
+        uploaded_file = st.file_uploader(msg["upload_help"], type=["jpg", "png", "jpeg"])
         
-        image_input = None
-        
-        if input_method == t["camera"]:
-            image_input = st.camera_input(t["camera_label"])
-        else:
-            image_input = st.file_uploader(t["upload_label"], type=["jpg", "png", "jpeg"])
+    with tab_camera:
+        camera_image = st.camera_input(msg["camera_button"])
+        if camera_image:
+            uploaded_file = camera_image
 
-        # 5. Analysis
-        if image_input is not None:
-            # Display the user image
-            image = Image.open(image_input).convert("RGB")
-            st.image(image, caption="Source Scan", use_column_width=True)
+    # --- Prediction Logic ---
+    if uploaded_file is not None:
+        st.info(msg["processing"])
+        
+        # Display the uploaded image
+        image = Image.open(uploaded_file)
+        st.image(image, caption="Uploaded Image", use_column_width=True)
+        
+        try:
+            # Run prediction
+            class_name, confidence_score = predict(image)
             
-            if st.button(t["analyze_btn"]):
-                with st.spinner('Analyzing patterns... / جاري تحليل الأنسجة...'):
-                    class_idx, score = process_and_predict(image, model)
-                    
-                    # Get class name (assuming Teachable Machine export: '0 ClassName', '1 ClassName')
-                    # IMPORTANT: You must verify your class names in labels.txt
-                    # Here we assume logic based on the class text itself
-                    prediction_label = class_names[class_idx]
-                    
-                    # Logic to determine if Tumor is Yes or No based on label text
-                    # Adjust 'yes' or 'tumor' based on how you named your classes in Teachable Machine
-                    is_tumor = "yes" in prediction_label.lower() or "tumor" in prediction_label.lower()
-                    
-                    # --- Presentation ---
-                    st.markdown(f"### {t['result_title']}")
-                    
-                    # Simple heuristic check for non-MRI images (low confidence or pure white/black)
-                    # Note: A real robust check needs a 3rd class "Random", but we use confidence threshold here
-                    if score < 0.60:
-                        st.warning(t["error_not_mri"])
-                    else:
-                        st.write(f"**{t['confidence']}** {score*100:.2f}%")
-                        
-                        container_class = "alert-positive" if is_tumor else "alert-negative"
-                        header_text = t["msg_positive_header"] if is_tumor else t["msg_negative_header"]
-                        body_text = t["msg_positive_body"] if is_tumor else t["msg_negative_body"]
-                        
-                        st.markdown(f"""
-                        <div class="report-container">
-                            <div class="medical-alert {container_class}">
-                                <h3>{header_text}</h3>
-                                <p>{body_text}</p>
-                            </div>
-                        </div>
-                        """, unsafe_allow_html=True)
-                        
-                        # Disclaimer
-                        st.caption("Disclaimer: This AI tool is for assistance only and does not replace professional medical diagnosis.")
+            # Convert confidence to percentage
+            confidence_percent = confidence_score * 100
+            
+            # --- Non-MRI Validation (Heuristic) ---
+            if confidence_percent < CONFIDENCE_THRESHOLD * 100:
+                st.error(msg["error_unclear"])
+            else:
+                # --- Display Results ---
+                st.header(msg["result_header"], anchor=False)
+                
+                # Determine the result scenario
+                # Assuming the Teachable Machine model has "No" as class 0 and "Yes" as class 1
+                # We will rely on the class_name extracted from labels.txt
+                
+                # Check if the class name contains "Yes" (or the positive indicator)
+                is_tumor = "yes" in class_name.lower() or "tumor" in class_name.lower()
+                
+                if is_tumor:
+                    st.markdown(f'<h3 style="color: #dc3545;">{msg["result_yes_title"]}</h3>', unsafe_allow_html=True)
+                    st.markdown(f'<p style="font-size: 1.1em; line-height: 1.6;">{msg["result_yes_text"]}</p>', unsafe_allow_html=True)
+                else:
+                    st.markdown(f'<h3 style="color: #28a745;">{msg["result_no_title"]}</h3>', unsafe_allow_html=True)
+                    st.markdown(f'<p style="font-size: 1.1em; line-height: 1.6;">{msg["result_no_text"]}</p>', unsafe_allow_html=True)
+                
+                st.markdown(f"**Confidence:** {confidence_percent:.2f}%")
+                st.markdown(f"**Predicted Class:** {class_name}")
+                
+        except Exception as e:
+            st.error(f"An unexpected error occurred during prediction: {e}")
+    
+    elif 'lang_selector' in st.session_state:
+        # Only show the initial message if no file is uploaded and the language selector has been initialized
+        st.info(msg["no_file"])
+
+    # Close RTL div if Arabic is selected
+    if lang == 'ar':
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # --- Developer Credit Footer ---
+    st.markdown(f'<div class="footer">{msg["developer_credit"]}</div>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
