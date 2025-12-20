@@ -16,7 +16,8 @@ MESSAGES = {
     "en": {
         "app_title": "AI NeuroScan",
         "title": "Brain Tumor Detection (AI-Powered)",
-        "sidebar_title": "Settings & Input",
+        "subtitle": "Leveraging advanced AI for early, non-invasive screening of brain MRI scans. Precision in every pixel.",
+        "sidebar_title": "Settings & Information",
         "language_label": "Select Language",
         "input_mode_label": "Select Input Method",
         "mode_upload": "Upload Image",
@@ -32,11 +33,16 @@ MESSAGES = {
         "result_no_title": "Scan Clear",
         "result_no_text": "Great news! The scan looks clear. No tumor detected. The symptoms you are experiencing may be due to other, less serious causes. Please follow up with your primary care physician for a comprehensive check-up.",
         "developer_credit": "Developed by **Oussama SEBROU**",
+        "about_title": "About AI NeuroScan",
+        "about_text": "AI NeuroScan is a prototype application developed to demonstrate the potential of Teachable Machine models in medical image classification. It is not a substitute for professional medical advice, diagnosis, or treatment.",
+        "references_title": "Professional References",
+        "references_text": "This application is based on the standard architecture for Keras models exported from Google's Teachable Machine. For professional use, always consult peer-reviewed medical literature and certified diagnostic tools.",
     },
     "ar": {
         "app_title": "الماسح العصبي بالذكاء الاصطناعي",
         "title": "كشف أورام الدماغ (مدعوم بالذكاء الاصطناعي)",
-        "sidebar_title": "الإعدادات والإدخال",
+        "subtitle": "تسخير الذكاء الاصطناعي المتقدم للكشف المبكر وغير الجراحي عن أورام الدماغ في صور الرنين المغناطيسي. دقة في كل بكسل.",
+        "sidebar_title": "الإعدادات والمعلومات",
         "language_label": "اختر اللغة",
         "input_mode_label": "اختر طريقة الإدخال",
         "mode_upload": "تحميل صورة",
@@ -52,6 +58,10 @@ MESSAGES = {
         "result_no_title": "المسح سليم",
         "result_no_text": "أهنئك من كل قلبي، فنتائج الأشعة والتحاليل جاءت مطمئنة تماماً ولا تظهر أي وجود لورم كما كنت تخشى. الصداع أو الأعراض التي كنت تشعر بها لها أسباب أخرى أبسط بكثير، وسنعمل معاً على معالجتها بهدوء. سنوجهك إلى فريق مختص يجب أن تتابع معه للتأكد من سلامة الجيوب الأنفية أو النظر أو ربما ضغوط الحياة اليومية، لضمان راحتك التامة. عد إلى منزلك وأنت مرتاح البال، فصحتك بخير وهذا هو الخبر الأجمل اليوم.",
         "developer_credit": "تم التطوير بواسطة **Oussama SEBROU**",
+        "about_title": "حول الماسح العصبي بالذكاء الاصطناعي",
+        "about_text": "الماسح العصبي بالذكاء الاصطناعي هو تطبيق نموذجي تم تطويره لإظهار إمكانات نماذج 'Teachable Machine' في تصنيف الصور الطبية. إنه ليس بديلاً عن المشورة الطبية المتخصصة أو التشخيص أو العلاج.",
+        "references_title": "المراجع المهنية",
+        "references_text": "يعتمد هذا التطبيق على البنية القياسية لنماذج Keras المصدرة من 'Teachable Machine' من Google. للاستخدام المهني، يجب دائماً استشارة الأدبيات الطبية المراجعة من قبل الأقران وأدوات التشخيص المعتمدة.",
     }
 }
 
@@ -61,23 +71,32 @@ CUSTOM_CSS = """
 /* Hide Streamlit header/footer */
 #MainMenu, footer {visibility: hidden;}
 
-/* Medical Blue/White Theme */
+/* Medical Blue/White Theme - Adjusted for better contrast and aesthetics */
 .stApp {
-    background-color: #f0f2f6; /* Light background */
-    color: #1c1c1c; /* Dark text */
+    background-color: #ffffff; /* Pure white background for clean medical look */
+    color: #212529; /* Darker text for better readability */
+    font-family: 'Arial', sans-serif;
 }
 .st-emotion-cache-1cypcdb { /* Main content container */
     max-width: 1000px;
     padding-top: 2rem;
     padding-bottom: 2rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 1.5rem; /* Increased padding */
+    padding-right: 1.5rem;
     margin: auto; /* Center the content */
 }
 h1 {
     color: #007bff; /* Medical Blue for titles */
     text-align: center;
-    font-weight: 600;
+    font-weight: 700; /* Bolder title */
+    font-size: 2.5em;
+}
+h2, h3 {
+    color: #0056b3; /* Slightly darker blue for subheadings */
+}
+p, div[data-testid="stMarkdownContainer"] p {
+    font-size: 1.1em; /* Slightly larger font for main text */
+    line-height: 1.7; /* Improved line spacing */
 }
 
 /* Developer Credit Footer */
@@ -86,13 +105,13 @@ h1 {
     left: 0;
     bottom: 0;
     width: 100%;
-    background-color: #e9ecef;
+    background-color: #f8f9fa; /* Lighter footer background */
     color: #6c757d;
     text-align: center;
-    padding: 10px;
-    font-size: 0.8em;
-    border-top: 1px solid #dee2e6;
-    z-index: 1000; /* Ensure it's on top */
+    padding: 8px; /* Slightly smaller padding */
+    font-size: 0.85em;
+    border-top: 1px solid #e9ecef;
+    z-index: 1000;
 }
 .footer strong {
     color: #007bff;
@@ -104,7 +123,7 @@ h1 {
     text-align: right;
 }
 /* Ensure sidebar elements are also styled for RTL when needed */
-.st-emotion-cache-1lcbmms { /* Target sidebar elements */
+.st-emotion-cache-1lcbmms, .st-emotion-cache-1lcbmms * { /* Target sidebar elements and their children */
     direction: rtl;
     text-align: right;
 }
@@ -170,20 +189,19 @@ def predict(image):
 
 # --- Main Application Logic ---
 def main():
-    # Initialize session state for language and input mode if not set
+    # --- Session State Initialization ---
     if 'lang' not in st.session_state:
         st.session_state.lang = 'en'
-    if 'input_mode' not in st.session_state:
-        st.session_state.input_mode = 'Upload Image'
+    # FIX: Store language-agnostic key for input mode
+    if 'input_mode_key' not in st.session_state:
+        st.session_state.input_mode_key = 'upload'
 
     # Get the current language messages
     lang = st.session_state.lang
     msg = MESSAGES[lang]
     
-    # Apply custom CSS
+    # Apply custom CSS and set page config
     st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
-    
-    # Set the page title to the new branding
     st.set_page_config(page_title=msg["app_title"], layout="centered")
 
     # --- Sidebar for Settings and Input Mode Selection ---
@@ -200,23 +218,51 @@ def main():
             on_change=lambda: st.session_state.update(lang='en' if st.session_state.lang_selector == 'English' else 'ar')
         )
         
-        # Input Mode selector (New requirement)
-        input_modes = [msg["mode_upload"], msg["mode_camera"]]
-        input_mode_selection = st.radio(
+        # Input Mode selector (Using keys for stability)
+        input_mode_options = {
+            'upload': msg["mode_upload"],
+            'camera': msg["mode_camera"]
+        }
+        input_mode_keys = list(input_mode_options.keys())
+        input_mode_display = list(input_mode_options.values())
+        
+        # Determine the current index based on the stored key
+        current_index = input_mode_keys.index(st.session_state.input_mode_key)
+        
+        selected_display_mode = st.radio(
             msg["input_mode_label"],
-            input_modes,
-            index=input_modes.index(st.session_state.input_mode),
+            input_mode_display,
+            index=current_index,
             key="input_mode_selector",
-            on_change=lambda: st.session_state.update(input_mode=st.session_state.input_mode_selector)
         )
+        
+        # Update the session state key based on the selected display value
+        if selected_display_mode == msg["mode_upload"]:
+            st.session_state.input_mode_key = 'upload'
+        elif selected_display_mode == msg["mode_camera"]:
+            st.session_state.input_mode_key = 'camera'
         
         # Re-run the app if language changes to update all text
         if (lang == 'en' and lang_option == 'العربية') or (lang == 'ar' and lang_option == 'English'):
             st.rerun()
 
+        st.markdown("---")
+        
+        # About Section
+        st.subheader(msg["about_title"], anchor=False)
+        st.caption(msg["about_text"])
+        
+        # References Section
+        st.subheader(msg["references_title"], anchor=False)
+        st.caption(msg["references_text"])
+
+
     # --- Main Content ---
     st.title(msg["app_title"])
-    st.header(msg["title"], anchor=False)
+    
+    # Motivational Subtitle
+    st.markdown(f'<p style="text-align: center; color: #6c757d; font-style: italic;">{msg["subtitle"]}</p>', unsafe_allow_html=True)
+    st.markdown("---")
     
     # Apply RTL class to main content if Arabic is selected
     if lang == 'ar':
@@ -225,11 +271,11 @@ def main():
     uploaded_file = None
     
     # Input area based on sidebar selection
-    if st.session_state.input_mode == msg["mode_upload"]:
+    if st.session_state.input_mode_key == 'upload':
         st.subheader(msg["mode_upload"], anchor=False)
         uploaded_file = st.file_uploader(msg["upload_help"], type=["jpg", "png", "jpeg"])
         
-    elif st.session_state.input_mode == msg["mode_camera"]:
+    elif st.session_state.input_mode_key == 'camera':
         st.subheader(msg["mode_camera"], anchor=False)
         camera_image = st.camera_input(msg["camera_button"])
         if camera_image:
@@ -258,9 +304,6 @@ def main():
                 st.header(msg["result_header"], anchor=False)
                 
                 # Determine the result scenario based on strict class names
-                # User specified class names: "no tumor in brain scan" and "yes have tumor"
-                
-                # Normalize class name for comparison (remove case and extra spaces)
                 normalized_class_name = class_name.lower().strip()
                 
                 is_tumor = False
