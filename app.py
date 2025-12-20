@@ -51,27 +51,21 @@ LANG_DICT = {
             النتائج المقدمة هي لأغراض إعلامية ومساعدة فقط. يجب دائماً استشارة طبيب مختص أو أخصائي أشعة لتأكيد أي تشخيص أو اتخاذ قرارات علاجية.
         """,
         "footer": "Developed by Oussama SEBROU",
+        # --- NEW --- Added a new message for invalid image type
+        "invalid_image_error": "خطأ: الصورة التي تم تحميلها لا تبدو كصورة رنين مغناطيسي للدماغ. يرجى تحميل صورة صالحة.",
         "advice_db": {
+            # --- MODIFIED --- Updated advice for "No Tumor"
             "No Tumor": {
                 "title": "نتائج مطمئنة: لا يوجد ورم",
                 "advice": """
-                **خبر سار ومريح!** تشير نتائج التحليل إلى أن الصورة لا تحمل أي علامات للورم المصنف. هذا يبعث على الاطمئنان.
-                
-                **توجيهات للحفاظ على الصحة:** تهانينا على هذه النتيجة الإيجابية. للحفاظ على صحتك وقوتك العقلية، نوصي بما يلي:
-                *   **الاستمرار في الفحوصات الروتينية** التي يحددها طبيبك.
-                *   **الحفاظ على نمط حياة صحي** يشمل التغذية المتوازنة والنشاط البدني والنوم الكافي.
-                *   **الدعم النفسي:** استمتع براحة البال، وتذكر أن العناية بالصحة رحلة مستمرة.
+                أهنئك من كل قلبي، فنتائج الأشعة والتحاليل جاءت مطمئنة تماماً ولا تظهر أي وجود لورم كما كنت تخشى. الصداع أو الأعراض التي كنت تشعر بها لها أسباب أخرى أبسط بكثير، وسنعمل معاً على معالجتها بهدوء. سنوجهك إلى فريق مختص يجب أن تتابع معه للتأكد من سلامة الجيوب الأنفية أو النظر أو ربما ضغوط الحياة اليومية، لضمان راحتك التامة. عد إلى منزلك وأنت مرتاح البال، فصحتك بخير وهذا هو الخبر الأجمل اليوم.
                 """
             },
+            # --- MODIFIED --- Updated advice for "Tumor Detected"
             "Tumor Detected": {
                 "title": "تنبيه هام: نتيجة تتطلب استشارة طبية عاجلة",
                 "advice": """
-                **رسالة دعم وتوجيه:** يشير التحليل إلى وجود احتمال لوجود ورم. من الطبيعي أن تشعر بالقلق، ولكن من المهم جداً أن تعلم أن هذا التشخيص هو **الخطوة الأولى نحو العلاج الفعال**.
-                
-                **توجيهات الطبيب الخبير:**
-                *   **التصرف بهدوء:** أهم خطوة الآن هي **مراجعة طبيب مختص (جراح أعصاب أو طبيب أورام عصبية) بأسرع وقت ممكن**.
-                *   **الأمل والعلاج:** مع التطور التكنولوجي والطبي الهائل، هناك خيارات علاجية متقدمة وفعالة جداً. **لا تقنط**، فالعلاج متاح، وفريقك الطبي سيضع خطة تناسب حالتك.
-                *   **الدعم النفسي:** لا تخض هذه التجربة وحدك. تحدث مع عائلتك وأصدقائك، واطلب الدعم النفسي. القوة الداخلية هي جزء أساسي من رحلة العلاج.
+                نتفهم تماماً حجم القلق الذي تشعر به الآن، والصراحة المهنية تقتضي أن نخبرك بوجود نمو غير طبيعي تظهره الصور، مما يتطلب تحركاً طبياً دقيقاً. لذلك، سنوجهك إلى فريق مختص يجب أن تتابع معه فوراً، يضم نخبة من جراحي الأعصاب وأطباء الأورام لوضع الخطة العلاجية الأنسب لحالتك. نُطمئنك بأن العلم الحديث حقق قفزات مذهلة في هذا المجال، ونحن معك خطوة بخطوة لدعمك طبياً ونفسياً. ثق بأن تشخيصنا المبكر هو أول طريق التعافي، وقوتك النفسية ستكون المحرك الأساسي لنجاح رحلة العلاج بإذن الله.
                 """
             },
             "Unclassified": {
@@ -116,27 +110,21 @@ LANG_DICT = {
             The results provided are for informational and assistive purposes only. You must always consult a specialized physician or radiologist to confirm any diagnosis or make treatment decisions.
         """,
         "footer": "Developed by Oussama SEBROU",
+        # --- NEW --- Added a new message for invalid image type
+        "invalid_image_error": "Error: The uploaded image does not appear to be a brain MRI scan. Please upload a valid image.",
         "advice_db": {
+            # --- MODIFIED --- Updated advice for "No Tumor"
             "No Tumor": {
                 "title": "Reassuring Results: No Tumor Found",
                 "advice": """
-                **Great and Reassuring News!** The analysis indicates that the image shows no signs of the classified tumor types. This is a source of relief.
-                
-                **Guidance for Health Maintenance:** Congratulations on this positive result. To maintain your health and mental strength, we recommend the following:
-                *   **Continue with routine check-ups** as determined by your physician.
-                *   **Maintain a healthy lifestyle** including balanced nutrition, physical activity, and sufficient sleep.
-                *   **Psychological Support:** Enjoy your peace of mind, and remember that health care is an ongoing journey.
+                I congratulate you with all my heart, as the results of the scans and analyses are completely reassuring and show no presence of a tumor as you feared. The headache or symptoms you were feeling have much simpler causes, and we will work together to address them calmly. We will guide you to a specialized team to follow up with to check your sinuses, vision, or perhaps the stresses of daily life, to ensure your complete comfort. Go home with peace of mind; your health is fine, and that is the best news today.
                 """
             },
+            # --- MODIFIED --- Updated advice for "Tumor Detected"
             "Tumor Detected": {
                 "title": "Important Alert: Result Requires Urgent Medical Consultation",
                 "advice": """
-                **A Message of Support and Guidance:** The analysis indicates a possibility of a tumor. It is normal to feel anxious, but it is very important to know that this diagnosis is **the first step towards effective treatment**.
-                
-                **Expert Medical Guidance:**
-                *   **Act Calmly:** The most important step now is to **consult a specialized physician (neurosurgeon or neuro-oncologist) as soon as possible**.
-                *   **Hope and Treatment:** With the tremendous technological and medical advancements, there are advanced and very effective treatment options. **Do not despair**, treatment is available, and your medical team will develop a plan that suits your condition.
-                *   **Psychological Support:** Do not go through this experience alone. Talk to your family and friends, and seek psychological support. Inner strength is an essential part of the treatment journey.
+                We fully understand the anxiety you are feeling right now, and professional honesty requires us to inform you that the images show abnormal growth, which demands precise medical action. Therefore, we will direct you to a specialized team that you must follow up with immediately, including elite neurosurgeons and oncologists, to develop the most suitable treatment plan for your condition. We assure you that modern science has made amazing leaps in this field, and we are with you step by step to support you medically and psychologically. Trust that our early diagnosis is the first step to recovery, and your mental strength will be the primary driver for the success of your treatment journey, God willing.
                 """
             },
             "Unclassified": {
@@ -171,19 +159,16 @@ T = LANG_DICT[st.session_state.lang]
 # --- Load Model and Labels ---
 @st.cache_resource
 def load_model():
-    # The model loading is cached, which significantly improves startup speed after the first run.
     model = tf.keras.models.load_model('keras_model.h5')
     return model
 
 @st.cache_data
 def load_labels():
-    # Labels loading is also cached.
     try:
         with open('labels.txt', 'r', encoding='utf-8') as f:
             labels = [line.strip() for line in f.readlines() if line.strip()]
     except FileNotFoundError:
         st.error(T["unclassified_error"].format(result="'labels.txt' not found"))
-        # Placeholder labels - USER MUST VERIFY THESE MATCH THEIR MODEL
         labels = ["No Tumor", "Glioma Tumor", "Meningioma Tumor", "Pituitary Tumor"] 
     return labels
 
@@ -192,13 +177,11 @@ labels = load_labels()
 
 # --- Expert Medical Advice Function ---
 def get_medical_advice(result_class):
-    # Map all tumor types to the general "Tumor Detected" advice
     if result_class in ["Glioma Tumor", "Meningioma Tumor", "Pituitary Tumor"]:
         return T["advice_db"]["Tumor Detected"]
     elif result_class == "No Tumor":
         return T["advice_db"]["No Tumor"]
     else:
-        # Handle unclassified or unknown results
         advice_data = T["advice_db"]["Unclassified"]
         advice_data['advice'] = advice_data['advice'].format(result=result_class)
         return advice_data
@@ -248,7 +231,6 @@ if image_data is not None:
     col1, col2 = st.columns([1, 1])
     
     with col1:
-        # Display the uploaded image
         st.image(image_data, caption=T["uploaded_caption"], use_column_width=True)
         
     with col2:
@@ -259,20 +241,16 @@ if image_data is not None:
             image_resized = image_data.resize(size)
             image_array = np.asarray(image_resized)
             
-            # Normalize the image
             normalized_image_array = (image_array.astype(np.float32) / 127.0) - 1
             
-            # Create the array of the right shape
             data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
             data[0] = normalized_image_array
 
             # Make prediction
             prediction = model.predict(data)
             
-            # Get the index of the highest confidence prediction
             predicted_class_index = np.argmax(prediction)
             
-            # Check if the index is valid
             if predicted_class_index < len(labels):
                 predicted_class = labels[predicted_class_index]
                 confidence_score = prediction[0][predicted_class_index] * 100
@@ -280,28 +258,34 @@ if image_data is not None:
                 predicted_class = "Unclassified"
                 confidence_score = 0.0
 
-        # Display results with better formatting
-        if "No Tumor" in predicted_class:
-            st.balloons()
-            st.success(T["no_tumor_success"].format(result=predicted_class))
-        elif "Unclassified" in predicted_class:
-            st.error(T["unclassified_error"].format(result=predicted_class))
+        # --- NEW --- Check if the image is likely a brain MRI
+        # This is a simple check: if the model is very unsure about all known classes,
+        # it's likely an irrelevant image. We check if the highest confidence is below a threshold (e.g., 50%).
+        if confidence_score < 50.0 and predicted_class != "No Tumor":
+            st.error(T["invalid_image_error"])
         else:
-            st.error(T["tumor_error"].format(result=predicted_class))
+            # Display results with better formatting
+            if "No Tumor" in predicted_class:
+                st.balloons()
+                st.success(T["no_tumor_success"].format(result=predicted_class))
+            elif "Unclassified" in predicted_class:
+                st.error(T["unclassified_error"].format(result=predicted_class))
+            else:
+                st.error(T["tumor_error"].format(result=predicted_class))
+                
+            st.metric(label=T["confidence_label"], value=f"{confidence_score:.2f}%")
             
-        st.metric(label=T["confidence_label"], value=f"{confidence_score:.2f}%")
-        
-        st.markdown("---")
-        
-        # --- Expert Advice Section ---
-        st.subheader(T["expert_advice_title"])
-        
-        # Get advice from the rule-based function
-        advice_data = get_medical_advice(predicted_class)
-        
-        st.markdown(f"#### {advice_data['title']}")
-        st.markdown(advice_data['advice'])
+            st.markdown("---")
+            
+            # --- Expert Advice Section ---
+            st.subheader(T["expert_advice_title"])
+            
+            advice_data = get_medical_advice(predicted_class)
+            
+            st.markdown(f"#### {advice_data['title']}")
+            st.markdown(advice_data['advice'])
         
 # --- Footer ---
 st.markdown("---")
 st.markdown(f"<p style='text-align: center; font-size: 14px;'>{T['footer']}</p>", unsafe_allow_html=True)
+
