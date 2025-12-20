@@ -14,15 +14,17 @@ CONFIDENCE_THRESHOLD = 0.7
 # --- Internationalization (i18n) Messages ---
 MESSAGES = {
     "en": {
+        "app_title": "AI NeuroScan",
         "title": "Brain Tumor Detection (AI-Powered)",
         "sidebar_title": "Settings & Input",
         "language_label": "Select Language",
-        "upload_tab": "Upload Image",
-        "camera_tab": "Live Camera",
+        "input_mode_label": "Select Input Method",
+        "mode_upload": "Upload Image",
+        "mode_camera": "Live Camera",
         "upload_help": "Upload a brain MRI image (JPG, PNG, JPEG)",
         "camera_button": "Capture Image",
         "processing": "Processing image...",
-        "no_file": "Please upload an image or capture one from the camera.",
+        "no_file": "Please select an input method and provide an image.",
         "error_unclear": "Image unclear or not an MRI scan. Please upload a clear brain MRI.",
         "result_header": "Analysis Result",
         "result_yes_title": "Anomaly Detected",
@@ -32,15 +34,17 @@ MESSAGES = {
         "developer_credit": "Developed by **Oussama SEBROU**",
     },
     "ar": {
+        "app_title": "الماسح العصبي بالذكاء الاصطناعي",
         "title": "كشف أورام الدماغ (مدعوم بالذكاء الاصطناعي)",
         "sidebar_title": "الإعدادات والإدخال",
         "language_label": "اختر اللغة",
-        "upload_tab": "تحميل صورة",
-        "camera_tab": "الكاميرا المباشرة",
+        "input_mode_label": "اختر طريقة الإدخال",
+        "mode_upload": "تحميل صورة",
+        "mode_camera": "الكاميرا المباشرة",
         "upload_help": "قم بتحميل صورة رنين مغناطيسي (MRI) للدماغ (JPG, PNG, JPEG)",
         "camera_button": "التقاط الصورة",
         "processing": "جاري معالجة الصورة...",
-        "no_file": "الرجاء تحميل صورة أو التقاط واحدة من الكاميرا.",
+        "no_file": "الرجاء اختيار طريقة إدخال وتقديم صورة.",
         "error_unclear": "الصورة غير واضحة أو ليست مسحاً بالرنين المغناطيسي. يرجى تحميل صورة واضحة.",
         "result_header": "نتيجة التحليل",
         "result_yes_title": "تم الكشف عن شذوذ",
@@ -119,7 +123,8 @@ def load_model_and_labels():
         class_names = []
         with open(LABELS_PATH, "r", encoding="utf-8") as f:
             for line in f:
-                class_names.append(line.strip()[2:]) # Remove the "0 " or "1 " prefix
+                # Remove the "0 " or "1 " prefix and strip whitespace
+                class_names.append(line.strip()[2:].strip()) 
         
         return model, class_names
     except FileNotFoundError:
@@ -165,9 +170,11 @@ def predict(image):
 
 # --- Main Application Logic ---
 def main():
-    # Initialize session state for language if not set
+    # Initialize session state for language and input mode if not set
     if 'lang' not in st.session_state:
         st.session_state.lang = 'en'
+    if 'input_mode' not in st.session_state:
+        st.session_state.input_mode = 'Upload Image'
 
     # Get the current language messages
     lang = st.session_state.lang
@@ -176,7 +183,10 @@ def main():
     # Apply custom CSS
     st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
     
-    # --- Sidebar for Language Selection ---
+    # Set the page title to the new branding
+    st.set_page_config(page_title=msg["app_title"], layout="centered")
+
+    # --- Sidebar for Settings and Input Mode Selection ---
     with st.sidebar:
         st.title(msg["sidebar_title"], anchor=False)
         
@@ -190,26 +200,37 @@ def main():
             on_change=lambda: st.session_state.update(lang='en' if st.session_state.lang_selector == 'English' else 'ar')
         )
         
+        # Input Mode selector (New requirement)
+        input_modes = [msg["mode_upload"], msg["mode_camera"]]
+        input_mode_selection = st.radio(
+            msg["input_mode_label"],
+            input_modes,
+            index=input_modes.index(st.session_state.input_mode),
+            key="input_mode_selector",
+            on_change=lambda: st.session_state.update(input_mode=st.session_state.input_mode_selector)
+        )
+        
         # Re-run the app if language changes to update all text
         if (lang == 'en' and lang_option == 'العربية') or (lang == 'ar' and lang_option == 'English'):
             st.rerun()
 
     # --- Main Content ---
-    st.title(msg["title"])
+    st.title(msg["app_title"])
+    st.header(msg["title"], anchor=False)
     
     # Apply RTL class to main content if Arabic is selected
     if lang == 'ar':
         st.markdown('<div class="rtl-text">', unsafe_allow_html=True)
 
-    # Input Tabs
-    tab_upload, tab_camera = st.tabs([msg["upload_tab"], msg["camera_tab"]])
-    
     uploaded_file = None
     
-    with tab_upload:
+    # Input area based on sidebar selection
+    if st.session_state.input_mode == msg["mode_upload"]:
+        st.subheader(msg["mode_upload"], anchor=False)
         uploaded_file = st.file_uploader(msg["upload_help"], type=["jpg", "png", "jpeg"])
         
-    with tab_camera:
+    elif st.session_state.input_mode == msg["mode_camera"]:
+        st.subheader(msg["mode_camera"], anchor=False)
         camera_image = st.camera_input(msg["camera_button"])
         if camera_image:
             uploaded_file = camera_image
@@ -236,12 +257,21 @@ def main():
                 # --- Display Results ---
                 st.header(msg["result_header"], anchor=False)
                 
-                # Determine the result scenario
-                # Assuming the Teachable Machine model has "No" as class 0 and "Yes" as class 1
-                # We will rely on the class_name extracted from labels.txt
+                # Determine the result scenario based on strict class names
+                # User specified class names: "no tumor in brain scan" and "yes have tumor"
                 
-                # Check if the class name contains "Yes" (or the positive indicator)
-                is_tumor = "yes" in class_name.lower() or "tumor" in class_name.lower()
+                # Normalize class name for comparison (remove case and extra spaces)
+                normalized_class_name = class_name.lower().strip()
+                
+                is_tumor = False
+                if "yes have tumor" in normalized_class_name:
+                    is_tumor = True
+                elif "no tumor in brain scan" in normalized_class_name:
+                    is_tumor = False
+                else:
+                    # Fallback for unexpected class names
+                    st.warning(f"Warning: Unexpected class name '{class_name}'. Assuming 'No Tumor' for safety.")
+                    is_tumor = False
                 
                 if is_tumor:
                     st.markdown(f'<h3 style="color: #dc3545;">{msg["result_yes_title"]}</h3>', unsafe_allow_html=True)
