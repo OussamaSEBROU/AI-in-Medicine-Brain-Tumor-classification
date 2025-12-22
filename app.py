@@ -26,7 +26,7 @@ MESSAGES = {
         "camera_button": "Capture Image",
         "processing": "Processing image...",
         "no_file": "Please select an input method and provide an image.",
-        "error_unclear": "Image unclear or not an MRI scan. Please upload a clear brain MRI.",
+        "error_unclear": "The uploaded image is unclear or not recognized as a brain MRI. Please upload a clear brain MRI scan for accurate analysis.",
         "result_header": "Analysis Result",
         "result_yes_title": "Anomaly Detected",
         "result_yes_text": "We have detected an anomaly. Please consult a specialist immediately. Early detection is key to successful treatment. We recommend contacting a neurosurgeon or oncologist.",
@@ -34,9 +34,9 @@ MESSAGES = {
         "result_no_text": "Great news! The scan looks clear. No tumor detected. The symptoms you are experiencing may be due to other, less serious causes. Please follow up with your primary care physician for a comprehensive check-up.",
         "developer_credit": "Developed by **Oussama SEBROU**",
         "about_title": "About AI NeuroScan",
-        "about_text": "AI NeuroScan is a prototype application developed to demonstrate the potential of Teachable Machine models in medical image classification. It is not a substitute for professional medical advice, diagnosis, or treatment.",
+        "about_text": "AI NeuroScan is a prototype application developed to demonstrate the potential of Teachable Machine models in medical image classification.",
         "references_title": "Professional References",
-        "references_text": "This application is based on the standard architecture for Keras models exported from Google's Teachable Machine. For professional use, always consult peer-reviewed medical literature and certified diagnostic tools.",
+        "references_text": "This application is based on the standard architecture for Keras models exported from Google's Teachable Machine.",
     },
     "ar": {
         "app_title": "الماسح العصبي بالذكاء الاصطناعي",
@@ -51,7 +51,7 @@ MESSAGES = {
         "camera_button": "التقاط الصورة",
         "processing": "جاري معالجة الصورة...",
         "no_file": "الرجاء اختيار طريقة إدخال وتقديم صورة.",
-        "error_unclear": "الصورة غير واضحة أو ليست مسحاً بالرنين المغناطيسي. يرجى تحميل صورة واضحة.",
+        "error_unclear": "الصورة المحملة غير واضحة أو لم يتم التعرف عليها كصورة رنين مغناطيسي للدماغ. يرجى رفع صورة MRI واضحة للدماغ فقط ليتعرف عليها النظام.",
         "result_header": "نتيجة التحليل",
         "result_yes_title": "تم الكشف عن شذوذ (Anomaly Detected)",
         "result_yes_text": "أفهم تماماً حجم القلق الذي تشعر به الآن، والصراحة المهنية تقتضي أن أخبرك بوجود نمو غير طبيعي تظهره الصور، مما يتطلب تحركاً طبياً دقيقاً. لذلك، سنوجهك إلى فريق مختص يجب أن تتابع معه فوراً، يضم نخبة من جراحي الأعصاب وأطباء الأورام لوضع الخطة العلاجية الأنسب لحالتك.",
@@ -83,7 +83,6 @@ def load_model_and_labels():
         class_names = []
         with open(LABELS_PATH, "r", encoding="utf-8") as f:
             for line in f:
-                # Expecting format "0 No Tumor" or "1 Tumor Detected"
                 parts = line.strip().split(" ", 1)
                 if len(parts) > 1:
                     class_names.append(parts[1].strip())
@@ -93,11 +92,22 @@ def load_model_and_labels():
         st.stop()
 
 def preprocess_image(image):
+    # تحويل الصورة إلى RGB لضمان وجود 3 قنوات (يحل مشكلة الصور الأبيض والأسود)
+    image = image.convert("RGB")
+    
+    # تغيير الحجم وقص الصورة من المركز
     image = ImageOps.fit(image, IMAGE_SIZE, Image.Resampling.LANCZOS)
+    
+    # تحويل إلى مصفوفة numpy
     image_array = np.asarray(image)
+    
+    # تطبيع القيم (Normalizing)
     normalized_image_array = (image_array.astype(np.float32) / 127.0) - 1
+    
+    # تهيئة المصفوفة بالشكل المطلوب (1, 224, 224, 3)
     data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
     data[0] = normalized_image_array
+    
     return data
 
 def main():
@@ -134,31 +144,34 @@ def main():
         image = Image.open(uploaded_file)
         st.image(image, use_column_width=True)
         
-        model, class_names = load_model_and_labels()
-        data = preprocess_image(image)
-        prediction = model.predict(data)
-        index = np.argmax(prediction)
-        class_name = class_names[index]
-        confidence = prediction[0][index]
+        with st.spinner(msg["processing"]):
+            try:
+                model, class_names = load_model_and_labels()
+                data = preprocess_image(image)
+                prediction = model.predict(data)
+                index = np.argmax(prediction)
+                class_name = class_names[index]
+                confidence = prediction[0][index]
 
-        if confidence < CONFIDENCE_THRESHOLD:
-            st.error(msg["error_unclear"])
-        else:
-            st.header(msg["result_header"])
-            # LOGIC FIX: Check based on labels.txt content
-            # "No Tumor" -> Scan Clear
-            # "Tumor Detected" -> Anomaly Detected
-            is_tumor = "Tumor Detected" in class_name
+                # التحقق من صحة الصورة
+                is_known_class = any(name in class_name for name in ["No Tumor", "Tumor Detected"])
 
-            if is_tumor:
-                st.markdown(f'<h3 style="color: #dc3545;">{msg["result_yes_title"]}</h3>', unsafe_allow_html=True)
-                st.write(msg["result_yes_text"])
-            else:
-                st.markdown(f'<h3 style="color: #28a745;">{msg["result_no_title"]}</h3>', unsafe_allow_html=True)
-                st.write(msg["result_no_text"])
-            
-            st.write(f"**Confidence:** {confidence*100:.2f}%")
-            st.write(f"**Class:** {class_name}")
+                if confidence < CONFIDENCE_THRESHOLD or not is_known_class:
+                    st.error(msg["error_unclear"])
+                else:
+                    st.header(msg["result_header"])
+                    
+                    if "Tumor Detected" in class_name:
+                        st.markdown(f'<h3 style="color: #dc3545;">{msg["result_yes_title"]}</h3>', unsafe_allow_html=True)
+                        st.write(msg["result_yes_text"])
+                    elif "No Tumor" in class_name:
+                        st.markdown(f'<h3 style="color: #28a745;">{msg["result_no_title"]}</h3>', unsafe_allow_html=True)
+                        st.write(msg["result_no_text"])
+                    
+                    st.write(f"**Confidence:** {confidence*100:.2f}%")
+                    st.write(f"**Class:** {class_name}")
+            except Exception as e:
+                st.error(f"Error during analysis: {e}")
 
     if lang == 'ar': st.markdown('</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="footer">{msg["developer_credit"]}</div>', unsafe_allow_html=True)
