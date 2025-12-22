@@ -9,7 +9,7 @@ import os
 MODEL_PATH = "keras_model.h5"
 LABELS_PATH = "labels.txt"
 IMAGE_SIZE = (224, 224)
-CONFIDENCE_THRESHOLD = 0.6  # تعديل طفيف للسماح بمرونة أكبر في التعرف
+CONFIDENCE_THRESHOLD = 0.5  # حد مرن لضمان قبول الصور الصحيحة مع التمييز الدقيق
 
 # --- Internationalization (i18n) Messages ---
 MESSAGES = {
@@ -26,12 +26,12 @@ MESSAGES = {
         "camera_button": "Capture Image",
         "processing": "Processing image...",
         "no_file": "Please select an input method and provide an image.",
-        "error_unclear": "The uploaded image is unclear or not recognized. Please ensure you upload a clear brain MRI scan (Axial, Sagittal, or Coronal view).",
+        "error_unclear": "The uploaded image is unclear or not recognized as a brain MRI. Please ensure you upload a clear brain MRI scan for accurate analysis.",
         "result_header": "Analysis Result",
         "result_yes_title": "Anomaly Detected",
-        "result_yes_text": "We have detected an anomaly. Please consult a specialist immediately. Early detection is key to successful treatment. We recommend contacting a neurosurgeon or oncologist.",
+        "result_yes_text": "I fully understand the depth of anxiety you are feeling right now. Professional integrity requires me to inform you that the images reveal an abnormal growth, which necessitates precise medical action. Therefore, we will refer you to a specialized team you must follow up with immediately—including elite neurosurgeons and oncologists—to develop the most appropriate treatment plan for your condition. I want to reassure you that modern science has made incredible leaps in this field, and we will be with you every step of the way to provide both medical and psychological support. Rest assured that our early diagnosis is the first step toward recovery, and your psychological strength will be the primary engine for the success of this treatment journey, God willing.",
         "result_no_title": "Scan Clear",
-        "result_no_text": "Great news! The scan looks clear. No tumor detected. The symptoms you are experiencing may be due to other, less serious causes. Please follow up with your primary care physician for a comprehensive check-up.",
+        "result_no_text": "Great news! I offer you my heartfelt congratulations; your scan and lab results are entirely reassuring and show no evidence of a tumor as you had feared. The headaches or symptoms you have been experiencing stem from much simpler causes, which we will work together to address calmly. We will refer you to a specialized team for further follow-up to check your sinuses, vision, or perhaps the impact of daily life stressors, ensuring your complete comfort and well-being. You can go home with a peaceful mind; you are in good health, and that is truly the best news today.",
         "developer_credit": "Developed by **Oussama SEBROU**",
         "about_title": "About technology",
         "about_text": "This app uses a Deep Learning model (Convolutional Neural Network) trained on thousands of MRI images to identify structural anomalies in the brain.",
@@ -55,10 +55,9 @@ MESSAGES = {
         "no_file": "الرجاء اختيار طريقة إدخال وتقديم صورة.",
         "error_unclear": "الصورة المحملة غير واضحة أو لم يتم التعرف عليها. يرجى التأكد من رفع صورة MRI واضحة للدماغ فقط ليتمكن النظام من تحليلها بدقة.",
         "result_header": "نتيجة التحليل",
-        "result_yes_title": "تم الكشف عن شذوذ (Anomaly Detected)",
-        "result_yes_text": "أفهم تماماً حجم القلق الذي تشعر به الآن، والصراحة المهنية تقتضي أن أخبرك بوجود نمو غير طبيعي تظهره الصور، مما يتطلب تحركاً طبياً دقيقاً. لذلك، سنوجهك إلى فريق مختص يجب أن تتابع معه فوراً، يضم نخبة من جراحي الأعصاب وأطباء الأورام.",
+        "result_yes_title": "أفهم تماماً حجم القلق الذي تشعر به الآن، والصراحة المهنية تقتضي أن أخبرك بوجود نمو غير طبيعي تظهره الصور، مما يتطلب تحركاً طبياً دقيقاً. لذلك، سنوجهك إلى فريق مختص يجب أن تتابع معه فوراً، يضم نخبة من جراحي الأعصاب وأطباء الأورام لوضع الخطة العلاجية الأنسب لحالتك. أطمئنك بأن العلم الحديث حقق قفزات مذهلة في هذا المجال، ونحن معك خطوة بخطوة لدعمك طبياً ونفسياً. ثق بأن تشخيصنا المبكر هو أول طريق التعافي، وقوتك النفسية ستكون المحرك الأساسي لنجاح رحلة العلاج بإذن الله.",
         "result_no_title": "المسح سليم (Scan Clear)",
-        "result_no_text": "أهنئك من كل قلبي، فنتائج الأشعة والتحاليل جاءت مطمئنة تماماً ولا تظهر أي وجود لورم كما كنت تخشى. الصداع أو الأعراض التي كنت تشعر بها لها أسباب أخرى أبسط بكثير، وسنعمل معاً على معالجتها بهدوء.",
+        "result_no_text": "أهنئك من كل قلبي، فنتائج الأشعة والتحاليل جاءت مطمئنة تماماً ولا تظهر أي وجود لورم كما كنت تخشى. الصداع أو الأعراض التي كنت تشعر بها لها أسباب أخرى أبسط بكثير، وسنعمل معاً على معالجتها بهدوء. سنوجهك إلى فريق مختص يجب أن تتابع معه للتأكد من سلامة الجيوب الأنفية أو النظر أو ربما ضغوط الحياة اليومية، لضمان راحتك التامة. عد إلى منزلك وأنت مرتاح البال، فصحتك بخير وهذا هو الخبر الأجمل اليوم.",
         "developer_credit": "تم التطوير بواسطة **Oussama SEBROU**",
         "about_title": "حول التقنية المستخدمة",
         "about_text": "يعتمد التطبيق على خوارزميات التعلم العميق (Deep Learning) وبالتحديد الشبكات العصبية التلافيفية (CNN) التي تم تدريبها لتمييز الأنماط غير الطبيعية في صور الرنين المغناطيسي.",
@@ -77,7 +76,7 @@ CUSTOM_CSS = """
 h1 { color: #007bff; text-align: center; font-weight: 700; font-size: 2.5em; }
 .footer { position: fixed; left: 0; bottom: 0; width: 100%; background-color: #f8f9fa; color: #6c757d; text-align: center; padding: 8px; font-size: 0.85em; border-top: 1px solid #e9ecef; z-index: 1000; }
 .rtl-text { direction: rtl; text-align: right; }
-.stSidebar { background-color: #f0f2f6; }
+/* إزالة اللون المخصص للسيدبار لجعله قياسياً */
 </style>
 """
 
@@ -92,8 +91,8 @@ def load_model_and_labels():
                     parts = line.strip().split(" ", 1)
                     if len(parts) > 1:
                         class_names.append(parts[1].strip())
-        else:
-            class_names = ["No Tumor", "Tumor Detected"] # Fallback
+        if not class_names:
+            class_names = ["No Tumor", "Tumor Detected"] 
         return model, class_names
     except Exception as e:
         st.error(f"Error loading model: {e}")
@@ -128,7 +127,6 @@ def main():
         st.session_state.input_mode_key = 'upload' if input_mode == msg["mode_upload"] else 'camera'
 
         st.markdown("---")
-        # New Help and Tech Info Sections
         st.subheader(msg["how_to_use_title"])
         st.info(msg["how_to_use_text"])
         
@@ -162,15 +160,18 @@ def main():
                 class_name = class_names[index]
                 confidence = prediction[0][index]
 
-                # Improved logic: Ensure the predicted class matches our expected labels
-                is_valid_prediction = ("No Tumor" in class_name or "Tumor Detected" in class_name)
+                # منطق التحقق المحسن:
+                # 1. التأكد من أن الفئة المتوقعة هي فعلاً إحدى الفئات الطبية المطلوبة
+                # 2. التأكد من أن نسبة الثقة مقبولة
+                is_tumor = "Tumor Detected" in class_name
+                is_no_tumor = "No Tumor" in class_name
 
-                if confidence < CONFIDENCE_THRESHOLD or not is_valid_prediction:
+                if confidence < CONFIDENCE_THRESHOLD or not (is_tumor or is_no_tumor):
                     st.error(msg["error_unclear"])
                 else:
                     st.header(msg["result_header"])
                     
-                    if "Tumor Detected" in class_name:
+                    if is_tumor:
                         st.markdown(f'<h3 style="color: #dc3545;">{msg["result_yes_title"]}</h3>', unsafe_allow_html=True)
                         st.write(msg["result_yes_text"])
                     else:
@@ -178,7 +179,7 @@ def main():
                         st.write(msg["result_no_text"])
                     
                     st.write(f"**Confidence Score:** {confidence*100:.2f}%")
-                    st.write(f"**Model Classification:** {class_name}")
+                    st.write(f"**Classification:** {class_name}")
             except Exception as e:
                 st.error(f"Error during analysis: {e}")
 
