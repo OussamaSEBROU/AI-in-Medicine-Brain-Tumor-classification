@@ -9,7 +9,7 @@ import os
 MODEL_PATH = "keras_model.h5"
 LABELS_PATH = "labels.txt"
 IMAGE_SIZE = (224, 224)
-CONFIDENCE_THRESHOLD = 0.7
+CONFIDENCE_THRESHOLD = 0.6  # تعديل طفيف للسماح بمرونة أكبر في التعرف
 
 # --- Internationalization (i18n) Messages ---
 MESSAGES = {
@@ -26,17 +26,19 @@ MESSAGES = {
         "camera_button": "Capture Image",
         "processing": "Processing image...",
         "no_file": "Please select an input method and provide an image.",
-        "error_unclear": "The uploaded image is unclear or not recognized as a brain MRI. Please upload a clear brain MRI scan for accurate analysis.",
+        "error_unclear": "The uploaded image is unclear or not recognized. Please ensure you upload a clear brain MRI scan (Axial, Sagittal, or Coronal view).",
         "result_header": "Analysis Result",
         "result_yes_title": "Anomaly Detected",
         "result_yes_text": "We have detected an anomaly. Please consult a specialist immediately. Early detection is key to successful treatment. We recommend contacting a neurosurgeon or oncologist.",
         "result_no_title": "Scan Clear",
         "result_no_text": "Great news! The scan looks clear. No tumor detected. The symptoms you are experiencing may be due to other, less serious causes. Please follow up with your primary care physician for a comprehensive check-up.",
         "developer_credit": "Developed by **Oussama SEBROU**",
-        "about_title": "About AI NeuroScan",
-        "about_text": "AI NeuroScan is a prototype application developed to demonstrate the potential of Teachable Machine models in medical image classification.",
-        "references_title": "Professional References",
-        "references_text": "This application is based on the standard architecture for Keras models exported from Google's Teachable Machine.",
+        "about_title": "About technology",
+        "about_text": "This app uses a Deep Learning model (Convolutional Neural Network) trained on thousands of MRI images to identify structural anomalies in the brain.",
+        "how_to_use_title": "How to Use",
+        "how_to_use_text": "1. Select 'Upload' or 'Camera'.\n2. Provide a clear MRI image.\n3. Wait for the AI analysis.\n4. Review the confidence score and prediction.",
+        "references_title": "Disclaimer",
+        "references_text": "This is a prototype for educational and screening purposes. It is NOT a definitive medical diagnosis.",
     },
     "ar": {
         "app_title": "الماسح العصبي بالذكاء الاصطناعي",
@@ -51,17 +53,19 @@ MESSAGES = {
         "camera_button": "التقاط الصورة",
         "processing": "جاري معالجة الصورة...",
         "no_file": "الرجاء اختيار طريقة إدخال وتقديم صورة.",
-        "error_unclear": "الصورة المحملة غير واضحة أو لم يتم التعرف عليها كصورة رنين مغناطيسي للدماغ. يرجى رفع صورة MRI واضحة للدماغ فقط ليتعرف عليها النظام.",
+        "error_unclear": "الصورة المحملة غير واضحة أو لم يتم التعرف عليها. يرجى التأكد من رفع صورة MRI واضحة للدماغ فقط ليتمكن النظام من تحليلها بدقة.",
         "result_header": "نتيجة التحليل",
         "result_yes_title": "تم الكشف عن شذوذ (Anomaly Detected)",
-        "result_yes_text": "أفهم تماماً حجم القلق الذي تشعر به الآن، والصراحة المهنية تقتضي أن أخبرك بوجود نمو غير طبيعي تظهره الصور، مما يتطلب تحركاً طبياً دقيقاً. لذلك، سنوجهك إلى فريق مختص يجب أن تتابع معه فوراً، يضم نخبة من جراحي الأعصاب وأطباء الأورام لوضع الخطة العلاجية الأنسب لحالتك.",
+        "result_yes_text": "أفهم تماماً حجم القلق الذي تشعر به الآن، والصراحة المهنية تقتضي أن أخبرك بوجود نمو غير طبيعي تظهره الصور، مما يتطلب تحركاً طبياً دقيقاً. لذلك، سنوجهك إلى فريق مختص يجب أن تتابع معه فوراً، يضم نخبة من جراحي الأعصاب وأطباء الأورام.",
         "result_no_title": "المسح سليم (Scan Clear)",
         "result_no_text": "أهنئك من كل قلبي، فنتائج الأشعة والتحاليل جاءت مطمئنة تماماً ولا تظهر أي وجود لورم كما كنت تخشى. الصداع أو الأعراض التي كنت تشعر بها لها أسباب أخرى أبسط بكثير، وسنعمل معاً على معالجتها بهدوء.",
         "developer_credit": "تم التطوير بواسطة **Oussama SEBROU**",
-        "about_title": "حول الماسح العصبي بالذكاء الاصطناعي",
-        "about_text": "الماسح العصبي بالذكاء الاصطناعي هو تطبيق نموذجي تم تطويره لإظهار إمكانات نماذج 'Teachable Machine' في تصنيف الصور الطبية.",
-        "references_title": "المراجع المهنية",
-        "references_text": "يعتمد هذا التطبيق على البنية القياسية لنماذج Keras المصدرة من 'Teachable Machine' من Google.",
+        "about_title": "حول التقنية المستخدمة",
+        "about_text": "يعتمد التطبيق على خوارزميات التعلم العميق (Deep Learning) وبالتحديد الشبكات العصبية التلافيفية (CNN) التي تم تدريبها لتمييز الأنماط غير الطبيعية في صور الرنين المغناطيسي.",
+        "how_to_use_title": "كيفية الاستخدام",
+        "how_to_use_text": "1. اختر 'تحميل صورة' أو 'الكاميرا'.\n2. ارفع صورة MRI واضحة للدماغ.\n3. انتظر معالجة الذكاء الاصطناعي.\n4. راجع النتيجة ونسبة الثقة الظاهرة.",
+        "references_title": "تنبيه هام",
+        "references_text": "هذا التطبيق هو نموذج أولي للأغراض التعليمية والفحص الأولي فقط، ولا يعتبر تشخيصاً طبياً نهائياً.",
     }
 }
 
@@ -73,6 +77,7 @@ CUSTOM_CSS = """
 h1 { color: #007bff; text-align: center; font-weight: 700; font-size: 2.5em; }
 .footer { position: fixed; left: 0; bottom: 0; width: 100%; background-color: #f8f9fa; color: #6c757d; text-align: center; padding: 8px; font-size: 0.85em; border-top: 1px solid #e9ecef; z-index: 1000; }
 .rtl-text { direction: rtl; text-align: right; }
+.stSidebar { background-color: #f0f2f6; }
 </style>
 """
 
@@ -81,33 +86,26 @@ def load_model_and_labels():
     try:
         model = tensorflow.keras.models.load_model(MODEL_PATH, compile=False)
         class_names = []
-        with open(LABELS_PATH, "r", encoding="utf-8") as f:
-            for line in f:
-                parts = line.strip().split(" ", 1)
-                if len(parts) > 1:
-                    class_names.append(parts[1].strip())
+        if os.path.exists(LABELS_PATH):
+            with open(LABELS_PATH, "r", encoding="utf-8") as f:
+                for line in f:
+                    parts = line.strip().split(" ", 1)
+                    if len(parts) > 1:
+                        class_names.append(parts[1].strip())
+        else:
+            class_names = ["No Tumor", "Tumor Detected"] # Fallback
         return model, class_names
     except Exception as e:
-        st.error(f"Error loading model/labels: {e}")
+        st.error(f"Error loading model: {e}")
         st.stop()
 
 def preprocess_image(image):
-    # تحويل الصورة إلى RGB لضمان وجود 3 قنوات (يحل مشكلة الصور الأبيض والأسود)
     image = image.convert("RGB")
-    
-    # تغيير الحجم وقص الصورة من المركز
     image = ImageOps.fit(image, IMAGE_SIZE, Image.Resampling.LANCZOS)
-    
-    # تحويل إلى مصفوفة numpy
     image_array = np.asarray(image)
-    
-    # تطبيع القيم (Normalizing)
     normalized_image_array = (image_array.astype(np.float32) / 127.0) - 1
-    
-    # تهيئة المصفوفة بالشكل المطلوب (1, 224, 224, 3)
     data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
     data[0] = normalized_image_array
-    
     return data
 
 def main():
@@ -128,6 +126,17 @@ def main():
 
         input_mode = st.radio(msg["input_mode_label"], [msg["mode_upload"], msg["mode_camera"]])
         st.session_state.input_mode_key = 'upload' if input_mode == msg["mode_upload"] else 'camera'
+
+        st.markdown("---")
+        # New Help and Tech Info Sections
+        st.subheader(msg["how_to_use_title"])
+        st.info(msg["how_to_use_text"])
+        
+        st.subheader(msg["about_title"])
+        st.caption(msg["about_text"])
+
+        st.subheader(msg["references_title"])
+        st.warning(msg["references_text"])
 
     st.title(msg["app_title"])
     st.markdown(f'<p style="text-align: center; color: #6c757d;">{msg["subtitle"]}</p>', unsafe_allow_html=True)
@@ -153,10 +162,10 @@ def main():
                 class_name = class_names[index]
                 confidence = prediction[0][index]
 
-                # التحقق من صحة الصورة
-                is_known_class = any(name in class_name for name in ["No Tumor", "Tumor Detected"])
+                # Improved logic: Ensure the predicted class matches our expected labels
+                is_valid_prediction = ("No Tumor" in class_name or "Tumor Detected" in class_name)
 
-                if confidence < CONFIDENCE_THRESHOLD or not is_known_class:
+                if confidence < CONFIDENCE_THRESHOLD or not is_valid_prediction:
                     st.error(msg["error_unclear"])
                 else:
                     st.header(msg["result_header"])
@@ -164,12 +173,12 @@ def main():
                     if "Tumor Detected" in class_name:
                         st.markdown(f'<h3 style="color: #dc3545;">{msg["result_yes_title"]}</h3>', unsafe_allow_html=True)
                         st.write(msg["result_yes_text"])
-                    elif "No Tumor" in class_name:
+                    else:
                         st.markdown(f'<h3 style="color: #28a745;">{msg["result_no_title"]}</h3>', unsafe_allow_html=True)
                         st.write(msg["result_no_text"])
                     
-                    st.write(f"**Confidence:** {confidence*100:.2f}%")
-                    st.write(f"**Class:** {class_name}")
+                    st.write(f"**Confidence Score:** {confidence*100:.2f}%")
+                    st.write(f"**Model Classification:** {class_name}")
             except Exception as e:
                 st.error(f"Error during analysis: {e}")
 
