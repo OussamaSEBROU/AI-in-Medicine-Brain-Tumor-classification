@@ -307,9 +307,9 @@ def main():
                 normalized_class_name = class_name.lower().strip()
                 
                 is_tumor = False
-                if "yes have tumor" in normalized_class_name:
+                if "Yes Have a Tumor in Brain Scan" in normalized_class_name:
                     is_tumor = True
-                elif "no tumor in brain scan" in normalized_class_name:
+                elif "No Tumor in Brain Scan" in normalized_class_name:
                     is_tumor = False
                 else:
                     # Fallback for unexpected class names
