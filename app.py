@@ -25,9 +25,9 @@ MESSAGES = {
         "camera_button": "Capture Image",
         "processing": "Processing image...",
         "result_header": "Analysis Result",
-        "result_yes_title": "Anomaly Detected",
+        "result_yes_title": "Anomaly Detected (Tumor Found)",
         "result_yes_text": "I fully understand the depth of anxiety you are feeling right now. Professional integrity requires me to inform you that the images reveal an abnormal growth, which necessitates precise medical action. Therefore, we will refer you to a specialized team you must follow up with immediately—including elite neurosurgeons and oncologists—to develop the most appropriate treatment plan for your condition. I want to reassure you that modern science has made incredible leaps in this field, and we will be with you every step of the way to provide both medical and psychological support. Rest assured that our early diagnosis is the first step toward recovery, and your psychological strength will be the primary engine for the success of this treatment journey, God willing.",
-        "result_no_title": "Scan Clear",
+        "result_no_title": "Scan Clear (No Tumor Found)",
         "result_no_text": "Great news! I offer you my heartfelt congratulations; your scan and lab results are entirely reassuring and show no evidence of a tumor as you had feared. The headaches or symptoms you have been experiencing stem from much simpler causes, which we will work together to address calmly. We will refer you to a specialized team for further follow-up to check your sinuses, vision, or perhaps the impact of daily life stressors, ensuring your complete comfort and well-being. You can go home with a peaceful mind; you are in good health, and that is truly the best news today.",
         "developer_credit": "Developed by **ErinovAIClub**",
         "about_title": "About technology",
@@ -50,9 +50,9 @@ MESSAGES = {
         "camera_button": "التقاط الصورة",
         "processing": "جاري معالجة الصورة...",
         "result_header": "نتيجة التحليل",
-        "result_yes_title": "تم الكشف عن شذوذ (Anomaly Detected)",
+        "result_yes_title": "تم الكشف عن شذوذ (وجود ورم)",
         "result_yes_text": "أفهم تماماً حجم القلق الذي تشعر به الآن، والصراحة المهنية تقتضي أن أخبرك بوجود نمو غير طبيعي تظهره الصور، مما يتطلب تحركاً طبياً دقيقاً. لذلك، سنوجهك إلى فريق مختص يجب أن تتابع معه فوراً، يضم نخبة من جراحي الأعصاب وأطباء الأورام لوضع الخطة العلاجية الأنسب لحالتك. أود أن أطمئنك بأن العلم الحديث قد حقق قفزات هائلة في هذا المجال، وسنكون معك في كل خطوة لتقديم الدعم الطبي والنفسي اللازم. تأكد أن تشخيصنا المبكر هو أولى خطوات الشفاء، وقوتك النفسية ستكون المحرك الأول لنجاح هذه الرحلة العلاجية بإذن الله.",
-        "result_no_title": "المسح سليم (Scan Clear)",
+        "result_no_title": "المسح سليم (لا يوجد ورم)",
         "result_no_text": "أهنئك من كل قلبي، فنتائج الأشعة والتحاليل جاءت مطمئنة تماماً ولا تظهر أي وجود لورم كما كنت تخشى. الصداع أو الأعراض التي كنت تشعر بها لها أسباب أخرى أبسط بكثير، وسنعمل معاً على معالجتها بهدوء. سنقوم بتوجيهك لفريق مختص للمتابعة الإضافية للتأكد من الجيوب الأنفية أو النظر أو ربما ضغوط الحياة اليومية لضمان راحتك الكاملة. يمكنك العودة إلى منزلك ببال مطمئن، فأنت بخير وصحة جيدة، وهذا هو الخبر الأجمل اليوم.",
         "developer_credit": "تم التطوير بواسطة **ErinovAIClub**",
         "about_title": "حول التقنية المستخدمة",
@@ -88,7 +88,7 @@ def load_model_and_labels():
                     if len(parts) > 1:
                         class_names.append(parts[1].strip())
         if not class_names:
-            class_names = ["No Tumor", "Tumor Detected"] 
+            class_names = ["No Tumor in Brain Scan", "Yes Have a Tumor in Brain Scan"] 
         return model, class_names
     except Exception as e:
         st.error(f"Error loading model: {e}")
@@ -160,15 +160,18 @@ def main():
 
                 st.header(msg["result_header"])
                 
-                if "Tumor Detected" in class_name:
+                # Updated Logic to match EXACT strings in labels.txt
+                if "Yes Have a Tumor" in class_name:
                     st.markdown(f'<h3 style="color: #dc3545;">{msg["result_yes_title"]}</h3>', unsafe_allow_html=True)
                     st.write(msg["result_yes_text"])
-                else:
+                elif "No Tumor" in class_name:
                     st.markdown(f'<h3 style="color: #28a745;">{msg["result_no_title"]}</h3>', unsafe_allow_html=True)
                     st.write(msg["result_no_text"])
+                else:
+                    st.warning(f"Classification result: {class_name}")
                 
                 st.write(f"**Confidence Score:** {confidence*100:.2f}%")
-                st.write(f"**Classification:** {class_name}")
+                st.write(f"**Classification Details:** {class_name}")
             except Exception as e:
                 st.error(f"Error during analysis: {e}")
 
