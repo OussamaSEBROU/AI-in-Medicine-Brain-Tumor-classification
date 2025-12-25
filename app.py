@@ -1,3 +1,4 @@
+
 import streamlit as st
 import tensorflow.keras
 from PIL import Image, ImageOps
@@ -36,6 +37,7 @@ MESSAGES = {
         "how_to_use_text": "1. Select 'Upload' or 'Camera'.\n2. Provide a clear MRI image.\n3. Wait for the AI analysis.\n4. Review the confidence score and prediction.",
         "references_title": "Disclaimer",
         "references_text": "This is a prototype for educational and screening purposes. It is NOT a definitive medical diagnosis.",
+        "developers_title": "Developers Team", # Added Key
     },
     "ar": {
         "app_title": "الماسح العصبي بالذكاء الاصطناعي",
@@ -61,6 +63,7 @@ MESSAGES = {
         "how_to_use_text": "1. اختر 'تحميل صورة' أو 'الكاميرا'.\n2. ارفع صورة MRI واضحة للدماغ.\n3. انتظر معالجة الذكاء الاصطناعي.\n4. راجع النتيجة ونسبة الثقة الظاهرة.",
         "references_title": "تنبيه هام",
         "references_text": "هذا التطبيق هو نموذج أولي للأغراض التعليمية والفحص الأولي فقط، ولا يعتبر تشخيصاً طبياً نهائياً.",
+        "developers_title": "فريق التطوير", # Added Key
     }
 }
 
@@ -131,6 +134,19 @@ def main():
 
         st.subheader(msg["references_title"])
         st.warning(msg["references_text"])
+
+        # --- Added Developers Section ---
+        st.markdown("---")
+        st.subheader(msg["developers_title"])
+        st.markdown("""
+        - Walid Tahkoubit
+        - Dalia
+        - B. Mohamed 
+        - Omar Slimen
+        - B. Lokman
+        - Omar
+        """)
+        # --------------------------------
 
     st.title(msg["app_title"])
     
