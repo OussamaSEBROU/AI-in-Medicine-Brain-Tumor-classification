@@ -1,0 +1,3 @@
+0 Yes Have a Tumor in Brain Scan
+1 No Tumor in Brain Scan
+2 Not MRI Scan
