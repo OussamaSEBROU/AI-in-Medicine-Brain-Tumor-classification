@@ -177,22 +177,21 @@ def main():
 
                 st.header(msg["result_header"])
 
-                # --- Modified Logic: 3 Cases Only ---
-                CONFIDENCE_THRESHOLD = 0.70  # يمكنك تعديل هذه القيمة حسب الحاجة
+                # --- Modified Logic: Based on Model's Classification Only ---
                 
-                # Case 1: Tumor detected with high confidence
-                if "Yes Have a Tumor" in class_name and confidence >= CONFIDENCE_THRESHOLD:
+                # Case 1: Model says "Yes Have a Tumor" - regardless of confidence
+                if "Yes Have a Tumor" in class_name:
                     st.markdown(f'<h3 style="color: #dc3545;">{msg["result_yes_title"]}</h3>', unsafe_allow_html=True)
                     st.write(msg["result_yes_text"])
                     st.write(f"**Confidence Score:** {confidence*100:.2f}%")
                 
-                # Case 2: No tumor detected with high confidence
-                elif "No Tumor" in class_name and confidence >= CONFIDENCE_THRESHOLD:
+                # Case 2: Model says "No Tumor" - regardless of confidence
+                elif "No Tumor" in class_name:
                     st.markdown(f'<h3 style="color: #28a745;">{msg["result_no_title"]}</h3>', unsafe_allow_html=True)
                     st.write(msg["result_no_text"])
                     st.write(f"**Confidence Score:** {confidence*100:.2f}%")
                 
-                # Case 3: Low confidence = Invalid image or not MRI
+                # Case 3: Any other case (shouldn't happen if model only has 2 classes, but just in case)
                 else:
                     st.error(msg["invalid_image_msg"])
                     st.info(f"**Detected Class:** {class_name} | **Confidence:** {confidence*100:.2f}%")
