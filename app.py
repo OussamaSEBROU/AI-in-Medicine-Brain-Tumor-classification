@@ -1,4 +1,3 @@
-
 import streamlit as st
 import tensorflow.keras
 from PIL import Image, ImageOps
@@ -30,6 +29,7 @@ MESSAGES = {
         "result_yes_text": "I fully understand the depth of anxiety you are feeling right now. Professional integrity requires me to inform you that the images reveal an abnormal growth, which necessitates precise medical action. Therefore, we will refer you to a specialized team you must follow up with immediately—including elite neurosurgeons and oncologists—to develop the most appropriate treatment plan for your condition. I want to reassure you that modern science has made incredible leaps in this field, and we will be with you every step of the way to provide both medical and psychological support. Rest assured that our early diagnosis is the first step toward recovery, and your psychological strength will be the primary engine for the success of this treatment journey, God willing.",
         "result_no_title": "Scan Clear (No Tumor Found)",
         "result_no_text": "Great news! I offer you my heartfelt congratulations; your scan and lab results are entirely reassuring and show no evidence of a tumor as you had feared. The headaches or symptoms you have been experiencing stem from much simpler causes, which we will work together to address calmly. We will refer you to a specialized team for further follow-up to check your sinuses, vision, or perhaps the impact of daily life stressors, ensuring your complete comfort and well-being. You can go home with a peaceful mind; you are in good health, and that is truly the best news today.",
+        "invalid_image_msg": "should take MRI brain scan picture only to analyzed with the AI model",
         "developer_credit": "Developed by **ErinovAIClub**",
         "about_title": "About technology",
         "about_text": "This app uses a Deep Learning model (Convolutional Neural Network) trained on thousands of MRI images to identify structural anomalies in the brain.",
@@ -37,7 +37,7 @@ MESSAGES = {
         "how_to_use_text": "1. Select 'Upload' or 'Camera'.\n2. Provide a clear MRI image.\n3. Wait for the AI analysis.\n4. Review the confidence score and prediction.",
         "references_title": "Disclaimer",
         "references_text": "This is a prototype for educational and screening purposes. It is NOT a definitive medical diagnosis.",
-        "developers_title": "Developers Team", # Added Key
+        "developers_title": "Developers Team",
     },
     "ar": {
         "app_title": "الماسح العصبي بالذكاء الاصطناعي",
@@ -56,6 +56,7 @@ MESSAGES = {
         "result_yes_text": "أفهم تماماً حجم القلق الذي تشعر به الآن، والصراحة المهنية تقتضي أن أخبرك بوجود نمو غير طبيعي تظهره الصور، مما يتطلب تحركاً طبياً دقيقاً. لذلك، سنوجهك إلى فريق مختص يجب أن تتابع معه فوراً، يضم نخبة من جراحي الأعصاب وأطباء الأورام لوضع الخطة العلاجية الأنسب لحالتك. أود أن أطمئنك بأن العلم الحديث قد حقق قفزات هائلة في هذا المجال، وسنكون معك في كل خطوة لتقديم الدعم الطبي والنفسي اللازم. تأكد أن تشخيصنا المبكر هو أولى خطوات الشفاء، وقوتك النفسية ستكون المحرك الأول لنجاح هذه الرحلة العلاجية بإذن الله.",
         "result_no_title": "المسح سليم (لا يوجد ورم)",
         "result_no_text": "أهنئك من كل قلبي، فنتائج الأشعة والتحاليل جاءت مطمئنة تماماً ولا تظهر أي وجود لورم كما كنت تخشى. الصداع أو الأعراض التي كنت تشعر بها لها أسباب أخرى أبسط بكثير، وسنعمل معاً على معالجتها بهدوء. سنقوم بتوجيهك لفريق مختص للمتابعة الإضافية للتأكد من الجيوب الأنفية أو النظر أو ربما ضغوط الحياة اليومية لضمان راحتك الكاملة. يمكنك العودة إلى منزلك ببال مطمئن، فأنت بخير وصحة جيدة، وهذا هو الخبر الأجمل اليوم.",
+        "invalid_image_msg": "يجب التقاط صورة رنين مغناطيسي للدماغ فقط ليتم تحليلها بواسطة نموذج الذكاء الاصطناعي",
         "developer_credit": "تم التطوير بواسطة **ErinovAIClub**",
         "about_title": "حول التقنية المستخدمة",
         "about_text": "يعتمد التطبيق على خوارزميات التعلم العميق (Deep Learning) وبالتحديد الشبكات العصبية التلافيفية (CNN) التي تم تدريبها لتمييز الأنماط غير الطبيعية في صور الرنين المغناطيسي.",
@@ -63,7 +64,7 @@ MESSAGES = {
         "how_to_use_text": "1. اختر 'تحميل صورة' أو 'الكاميرا'.\n2. ارفع صورة MRI واضحة للدماغ.\n3. انتظر معالجة الذكاء الاصطناعي.\n4. راجع النتيجة ونسبة الثقة الظاهرة.",
         "references_title": "تنبيه هام",
         "references_text": "هذا التطبيق هو نموذج أولي للأغراض التعليمية والفحص الأولي فقط، ولا يعتبر تشخيصاً طبياً نهائياً.",
-        "developers_title": "فريق التطوير", # Added Key
+        "developers_title": "فريق التطوير",
     }
 }
 
@@ -128,7 +129,7 @@ def main():
         st.markdown("---")
         st.subheader(msg["how_to_use_title"])
         st.info(msg["how_to_use_text"])
-        
+
         st.subheader(msg["about_title"])
         st.caption(msg["about_text"])
 
@@ -149,10 +150,10 @@ def main():
         # --------------------------------
 
     st.title(msg["app_title"])
-    
+
     # Introduction Box
     st.markdown(f'<div class="intro-box {"rtl-text" if lang == "ar" else ""}"> {msg["intro_text"]} </div>', unsafe_allow_html=True)
-    
+
     if lang == 'ar': st.markdown('<div class="rtl-text">', unsafe_allow_html=True)
 
     uploaded_file = None
@@ -164,7 +165,7 @@ def main():
     if uploaded_file:
         image = Image.open(uploaded_file)
         st.image(image, use_column_width=True)
-        
+
         with st.spinner(msg["processing"]):
             try:
                 model, class_names = load_model_and_labels()
@@ -175,19 +176,22 @@ def main():
                 confidence = prediction[0][index]
 
                 st.header(msg["result_header"])
-                
-                # Updated Logic to match EXACT strings in labels.txt
+
+                # --- Modified Logic with if-elif-else ---
                 if "Yes Have a Tumor" in class_name:
                     st.markdown(f'<h3 style="color: #dc3545;">{msg["result_yes_title"]}</h3>', unsafe_allow_html=True)
                     st.write(msg["result_yes_text"])
+                    st.write(f"**Confidence Score:** {confidence*100:.2f}%")
+                    st.write(f"**Classification Details:** {class_name}")
                 elif "No Tumor" in class_name:
                     st.markdown(f'<h3 style="color: #28a745;">{msg["result_no_title"]}</h3>', unsafe_allow_html=True)
                     st.write(msg["result_no_text"])
+                    st.write(f"**Confidence Score:** {confidence*100:.2f}%")
+                    st.write(f"**Classification Details:** {class_name}")
                 else:
-                    st.warning(f"Classification result: {class_name}")
-                
-                st.write(f"**Confidence Score:** {confidence*100:.2f}%")
-                st.write(f"**Classification Details:** {class_name}")
+                    st.error(msg["invalid_image_msg"])
+                # ----------------------------------------
+
             except Exception as e:
                 st.error(f"Error during analysis: {e}")
 
