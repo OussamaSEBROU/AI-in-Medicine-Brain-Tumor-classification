@@ -59,7 +59,7 @@ MESSAGES = {
         "invalid_image_msg": "يجب التقاط صورة رنين مغناطيسي للدماغ فقط ليتم تحليلها بواسطة نموذج الذكاء الاصطناعي",
         "developer_credit": "تم التطوير بواسطة **ErinovAIClub**",
         "about_title": "حول التقنية المستخدمة",
-        "about_text": "يعتمد التطبيق على خوارزميات التعلم العميق (Deep Learning) وبالتحديد الشبكات العصبية التلافيفية (CNN) التي تم تدريبها لتمييز الأنماط غير الطبيعية في صور الرنين المغناطيسي.",
+        "about_text": "يعتمد التطبيق على خوارزميات التعلم العميق (Deep Learning) وبالتحديد الشبكات العصبية تلافيفية (CNN) التي تم تدريبها لتمييز الأنماط غير الطبيعية في صور الرنين المغناطيسي.",
         "how_to_use_title": "كيفية الاستخدام",
         "how_to_use_text": "1. اختر 'تحميل صورة' أو 'الكاميرا'.\n2. ارفع صورة MRI واضحة للدماغ.\n3. انتظر معالجة الذكاء الاصطناعي.\n4. راجع النتيجة ونسبة الثقة الظاهرة.",
         "references_title": "تنبيه هام",
@@ -177,18 +177,22 @@ def main():
 
                 st.header(msg["result_header"])
 
-                # --- Modified Logic with if-elif-else ---
-                if "Yes Have a Tumor" in class_name:
+                # --- Refined Logic with Strict if-elif-else ---
+                # We use a high confidence threshold to ensure it's actually a brain scan
+                # and strictly check for the two valid classes.
+                
+                if "Yes Have a Tumor" in class_name and confidence > 0.9:
                     st.markdown(f'<h3 style="color: #dc3545;">{msg["result_yes_title"]}</h3>', unsafe_allow_html=True)
                     st.write(msg["result_yes_text"])
                     st.write(f"**Confidence Score:** {confidence*100:.2f}%")
-                    st.write(f"**Classification Details:** {class_name}")
-                elif "No Tumor" in class_name:
+                elif "No Tumor" in class_name and confidence > 0.9:
                     st.markdown(f'<h3 style="color: #28a745;">{msg["result_no_title"]}</h3>', unsafe_allow_html=True)
                     st.write(msg["result_no_text"])
                     st.write(f"**Confidence Score:** {confidence*100:.2f}%")
-                    st.write(f"**Classification Details:** {class_name}")
                 else:
+                    # This 'else' catches everything else:
+                    # 1. Low confidence (not sure if it's a brain scan)
+                    # 2. Any other class that might be in the model
                     st.error(msg["invalid_image_msg"])
                 # ----------------------------------------
 
