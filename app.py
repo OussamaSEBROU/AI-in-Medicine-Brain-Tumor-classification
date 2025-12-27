@@ -29,7 +29,7 @@ MESSAGES = {
         "result_yes_text": "I fully understand the depth of anxiety you are feeling right now. Professional integrity requires me to inform you that the images reveal an abnormal growth, which necessitates precise medical action. Therefore, we will refer you to a specialized team you must follow up with immediately—including elite neurosurgeons and oncologists—to develop the most appropriate treatment plan for your condition. I want to reassure you that modern science has made incredible leaps in this field, and we will be with you every step of the way to provide both medical and psychological support. Rest assured that our early diagnosis is the first step toward recovery, and your psychological strength will be the primary engine for the success of this treatment journey, God willing.",
         "result_no_title": "Scan Clear (No Tumor Found)",
         "result_no_text": "Great news! I offer you my heartfelt congratulations; your scan and lab results are entirely reassuring and show no evidence of a tumor as you had feared. The headaches or symptoms you have been experiencing stem from much simpler causes, which we will work together to address calmly. We will refer you to a specialized team for further follow-up to check your sinuses, vision, or perhaps the impact of daily life stressors, ensuring your complete comfort and well-being. You can go home with a peaceful mind; you are in good health, and that is truly the best news today.",
-        "invalid_image_msg": "should take MRI brain scan picture only to analyzed with the AI model",
+        "invalid_image_msg": "⚠️ Unable to classify the image. The model's confidence is too low. Please ensure you upload a clear MRI brain scan image only.",
         "developer_credit": "Developed by **ErinovAIClub**",
         "about_title": "About technology",
         "about_text": "This app uses a Deep Learning model (Convolutional Neural Network) trained on thousands of MRI images to identify structural anomalies in the brain.",
@@ -56,7 +56,7 @@ MESSAGES = {
         "result_yes_text": "أفهم تماماً حجم القلق الذي تشعر به الآن، والصراحة المهنية تقتضي أن أخبرك بوجود نمو غير طبيعي تظهره الصور، مما يتطلب تحركاً طبياً دقيقاً. لذلك، سنوجهك إلى فريق مختص يجب أن تتابع معه فوراً، يضم نخبة من جراحي الأعصاب وأطباء الأورام لوضع الخطة العلاجية الأنسب لحالتك. أود أن أطمئنك بأن العلم الحديث قد حقق قفزات هائلة في هذا المجال، وسنكون معك في كل خطوة لتقديم الدعم الطبي والنفسي اللازم. تأكد أن تشخيصنا المبكر هو أولى خطوات الشفاء، وقوتك النفسية ستكون المحرك الأول لنجاح هذه الرحلة العلاجية بإذن الله.",
         "result_no_title": "المسح سليم (لا يوجد ورم)",
         "result_no_text": "أهنئك من كل قلبي، فنتائج الأشعة والتحاليل جاءت مطمئنة تماماً ولا تظهر أي وجود لورم كما كنت تخشى. الصداع أو الأعراض التي كنت تشعر بها لها أسباب أخرى أبسط بكثير، وسنعمل معاً على معالجتها بهدوء. سنقوم بتوجيهك لفريق مختص للمتابعة الإضافية للتأكد من الجيوب الأنفية أو النظر أو ربما ضغوط الحياة اليومية لضمان راحتك الكاملة. يمكنك العودة إلى منزلك ببال مطمئن، فأنت بخير وصحة جيدة، وهذا هو الخبر الأجمل اليوم.",
-        "invalid_image_msg": "يجب التقاط صورة رنين مغناطيسي للدماغ فقط ليتم تحليلها بواسطة نموذج الذكاء الاصطناعي",
+        "invalid_image_msg": "⚠️ تعذر تصنيف الصورة. ثقة النموذج منخفضة جداً. يرجى التأكد من رفع صورة رنين مغناطيسي واضحة للدماغ فقط.",
         "developer_credit": "تم التطوير بواسطة **ErinovAIClub**",
         "about_title": "حول التقنية المستخدمة",
         "about_text": "يعتمد التطبيق على خوارزميات التعلم العميق (Deep Learning) وبالتحديد الشبكات العصبية تلافيفية (CNN) التي تم تدريبها لتمييز الأنماط غير الطبيعية في صور الرنين المغناطيسي.",
@@ -177,23 +177,26 @@ def main():
 
                 st.header(msg["result_header"])
 
-                # --- Refined Logic with Strict if-elif-else ---
-                # We use a high confidence threshold to ensure it's actually a brain scan
-                # and strictly check for the two valid classes.
+                # --- Modified Logic: 3 Cases Only ---
+                CONFIDENCE_THRESHOLD = 0.70  # يمكنك تعديل هذه القيمة حسب الحاجة
                 
-                if "Yes Have a Tumor" in class_name and confidence > 0.9:
+                # Case 1: Tumor detected with high confidence
+                if "Yes Have a Tumor" in class_name and confidence >= CONFIDENCE_THRESHOLD:
                     st.markdown(f'<h3 style="color: #dc3545;">{msg["result_yes_title"]}</h3>', unsafe_allow_html=True)
                     st.write(msg["result_yes_text"])
                     st.write(f"**Confidence Score:** {confidence*100:.2f}%")
-                elif "No Tumor" in class_name and confidence > 0.9:
+                
+                # Case 2: No tumor detected with high confidence
+                elif "No Tumor" in class_name and confidence >= CONFIDENCE_THRESHOLD:
                     st.markdown(f'<h3 style="color: #28a745;">{msg["result_no_title"]}</h3>', unsafe_allow_html=True)
                     st.write(msg["result_no_text"])
                     st.write(f"**Confidence Score:** {confidence*100:.2f}%")
+                
+                # Case 3: Low confidence = Invalid image or not MRI
                 else:
-                    # This 'else' catches everything else:
-                    # 1. Low confidence (not sure if it's a brain scan)
-                    # 2. Any other class that might be in the model
                     st.error(msg["invalid_image_msg"])
+                    st.info(f"**Detected Class:** {class_name} | **Confidence:** {confidence*100:.2f}%")
+                    st.warning("The image may not be a valid brain MRI scan, or the quality is too poor for accurate analysis.")
                 # ----------------------------------------
 
             except Exception as e:
