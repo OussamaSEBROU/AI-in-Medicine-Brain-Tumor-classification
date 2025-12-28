@@ -14,7 +14,7 @@ IMAGE_SIZE = (224, 224)
 MESSAGES = {
     "en": {
         "app_title": "AI NeuroScan",
-        "intro_text": "Welcome to AI NeuroScan. This platform provides an initial automated screening for brain MRI scans using advanced neural networks to assist in early detection.",
+        "intro_text": "Welcome to AI NeuroScan This platform provides an initial automated screening for brain MRI scans using advanced  AI neural networks to assist in early detection.",
         "subtitle": "Leveraging advanced AI for early, non-invasive screening of brain MRI scans. Precision in every pixel.",
         "sidebar_title": "Settings & Information",
         "language_label": "Select Language",
@@ -31,7 +31,7 @@ MESSAGES = {
         "result_no_text": "I'm pleased to share positive news with you. The AI analysis of your brain MRI scan shows no evidence of tumor or significant abnormal growth. This is genuinely encouraging and should bring you considerable peace of mind.\n\n**What This Means:**\n- No suspicious masses or lesions were detected in the brain tissue\n- The scan appears consistent with normal brain structure\n- Your symptoms (if any) likely have other, more common causes\n\n**Understanding Your Symptoms:**\nIf you've been experiencing headaches, dizziness, or other neurological symptoms, these could be related to:\n- Tension or migraine headaches (very common and manageable)\n- Sinus issues or allergies\n- Vision problems requiring corrective lenses\n- Sleep disturbances or stress\n- Dehydration or nutritional factors\n\n**Recommended Follow-Up:**\nWhile this screening is reassuring, I recommend:\n1. Discuss this result with your primary care physician\n2. Address any ongoing symptoms with appropriate specialists (ENT, ophthalmologist, neurologist)\n3. Maintain healthy lifestyle habits: adequate sleep, stress management, regular exercise\n4. Keep routine medical check-ups as recommended by your doctor\n\n**Important Reminder:**\nThis AI screening is a valuable tool, but it doesn't replace professional medical evaluation. If your symptoms persist or worsen, don't hesitate to seek medical advice.\n\nYou can move forward with confidence knowing that this aspect of your health appears stable. Focus on addressing any symptoms through appropriate medical channels, and maintain your overall wellness.",
         "invalid_image_msg": "⚠️ Invalid Image - Not a Brain MRI Scan",
         "invalid_image_details": "The uploaded/captured image is not clear or is not a brain MRI scan. Please ensure you upload a high-quality MRI brain scan image for accurate analysis.",
-        "developer_credit": "Developed by **ErinovAIClub**",
+        "developer_credit": "Developed by Erinov AI Club ",
         "about_title": "About technology",
         "about_text": "This app uses a Deep Learning model (Convolutional Neural Network) trained on thousands of MRI images to identify structural anomalies in the brain.",
         "how_to_use_title": "How to Use",
@@ -42,7 +42,7 @@ MESSAGES = {
     },
     "ar": {
         "app_title": "الماسح العصبي بالذكاء الاصطناعي",
-        "intro_text": "مرحباً بكم في منصة الماسح العصبي. يوفر هذا التطبيق فحصاً أولياً مؤتمتاً لصور الرنين المغناطيسي للدماغ باستخدام شبكات عصبية متطورة للمساعدة في الكشف المبكر.",
+        "intro_text": "مرحباً بكم، يوفر هذا التطبيق فحصاً أولياً مؤتمتاً لصور الرنين المغناطيسي للدماغ باستخدام شبكات عصبية متطورة للمساعدة في الكشف المبكر.",
         "subtitle": "تسخير الذكاء الاصطناعي المتقدم للكشف المبكر وغير الجراحي عن أورام الدماغ في صور الرنين المغناطيسي. دقة في كل بكسل.",
         "sidebar_title": "الإعدادات والمعلومات",
         "language_label": "اختر اللغة",
@@ -59,7 +59,7 @@ MESSAGES = {
         "result_no_text": "أهنئك من كل قلبي، فنتائج الأشعة والتحاليل جاءت مطمئنة تماماً ولا تظهر أي وجود لورم كما كنت تخشى. الصداع أو الأعراض التي كنت تشعر بها لها أسباب أخرى أبسط بكثير، وسنعمل معاً على معالجتها بهدوء. سنقوم بتوجيهك لفريق مختص للمتابعة الإضافية للتأكد من الجيوب الأنفية أو النظر أو ربما ضغوط الحياة اليومية لضمان راحتك الكاملة. يمكنك العودة إلى منزلك ببال مطمئن، فأنت بخير وصحة جيدة، وهذا هو الخبر الأجمل اليوم.",
         "invalid_image_msg": "⚠️ صورة غير صالحة - ليست صورة رنين مغناطيسي للدماغ",
         "invalid_image_details": "الصورة التي تم رفعها أو التقاطها ليست واضحة أو ليست صورة رنين مغناطيسي للدماغ (MRI Brain Scan). يرجى التأكد من رفع صورة MRI واضحة وعالية الجودة للحصول على تحليل دقيق.",
-        "developer_credit": "تم التطوير بواسطة **ErinovAIClub**",
+        "developer_credit": "Developed by Erinov AI Club",
         "about_title": "حول التقنية المستخدمة",
         "about_text": "يعتمد التطبيق على خوارزميات التعلم العميق (Deep Learning) وبالتحديد الشبكات العصبية تلافيفية (CNN) التي تم تدريبها لتمييز الأنماط غير الطبيعية في صور الرنين المغناطيسي.",
         "how_to_use_title": "كيفية الاستخدام",
