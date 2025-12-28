@@ -12,21 +12,21 @@ IMAGE_SIZE = (224, 224)
 
 # --- Internationalization (i18n) Messages ---
 MESSAGES = {
-    "en":  {
+    "en": {
         "app_title": "AI NeuroScan",
-        "intro_text": "Welcome to AI NeuroScan Our advanced neural network provides rapid, automated screening of brain MRI scans Designed to support clinical workflows, this tool identifies structura[...]",
+        "intro_text": "Welcome to AI NeuroScan Our advanced neural network provides rapid, automated screening of brain MRI scans Designed to support clinical workflows, this tool identifies struc[...]",
         "subtitle": "Leveraging advanced AI for early, non-invasive screening of brain MRI scans.  Precision in every pixel.",
         "sidebar_title": "Settings & Information",
         "language_label": "Select Language",
         "input_mode_label": "Select Input Method",
         "mode_upload":  "Upload Image",
-        "mode_camera": "Live Camera",
+        "mode_camera":  "Live Camera",
         "upload_help": "Upload a brain MRI image (JPG, PNG, JPEG)",
         "camera_button": "Capture Image",
         "processing":  "Processing image...",
         "result_header": "Analysis Result",
         "result_yes_title": "Anomaly Detected (Tumor Found)",
-        "result_yes_text": "I want to speak with you with complete transparency and empathy.  The AI analysis has detected an abnormal growth in your brain scan that requires immediate medical attentio[...]",
+        "result_yes_text": "I want to speak with you with complete transparency and empathy. The AI analysis has detected an abnormal growth in your brain scan that requires immediate medical atte[...]",
         "result_no_title": "Scan Clear (No Tumor Found)",
         "result_no_text": "I'm pleased to share positive news with you. The AI analysis of your brain MRI scan shows no evidence of tumor or significant abnormal growth.",
         "invalid_image_msg": "⚠️ Invalid Image - Not a Brain MRI Scan",
@@ -43,7 +43,7 @@ MESSAGES = {
     },
     "ar":  {
         "app_title":  "AI NeuroScan",
-        "intro_text": "مرحباً بكم، توفر منصتنا فحصاً ذكياً وفورياً لصور الرنين المغناطيسي للدماغ باستخدام تقنيات التعل[...]",
+        "intro_text": "مرحباً بكم، توفر منصتنا فحصاً ذكياً وفورياً لصور الرنين المغناطيسي للدماغ باستخدام تقنيات الت[...]",
         "subtitle":  "تسخير الذكاء الاصطناعي المتقدم للكشف المبكر وغير الجراحي عن أورام الدماغ",
         "sidebar_title": "الإعدادات والمعلومات",
         "language_label": "اختر اللغة",
@@ -52,14 +52,14 @@ MESSAGES = {
         "mode_camera": "الكاميرا المباشرة",
         "upload_help": "قم بتحميل صورة رنين مغناطيسي (MRI) للدماغ",
         "camera_button": "التقاط الصورة",
-        "processing": "جاري معالجة الصورة...",
-        "result_header": "نتيجة التحليل",
+        "processing": "جاري معالجة الصورة.. .",
+        "result_header":  "نتيجة التحليل",
         "result_yes_title": "تم الكشف عن شذوذ (وجود ورم)",
-        "result_yes_text": "أود أن أتحدث معك بشفافية كاملة وتعاطف. أظهر التحليل بواسطة الذكاء الاصطناعي وجود نمو غير طبيعي[...]",
+        "result_yes_text": "أود أن أتحدث معك بشفافية كاملة وتعاطف. أظهر التحليل بواسطة الذكاء الاصطناعي وجود نمو غير طبي[...]",
         "result_no_title": "المسح سليم (لا يوجد ورم)",
-        "result_no_text":  "يسعدني مشاركة أخبار إيجابية معك.  أظهر تحليل الذكاء الاصطناعي لفحص الرنين المغناطيسي للدماغ عد�[...]",
+        "result_no_text":  "يسعدني مشاركة أخبار إيجابية معك. أظهر تحليل الذكاء الاصطناعي لفحص الرنين المغناطيسي للدماغ [...]",
         "invalid_image_msg": "⚠️ صورة غير صالحة - ليست صورة رنين مغناطيسي",
-        "invalid_image_details": "الصورة التي تم رفعها أو التقاطها ليست واضحة أو ليست صورة رنين مغناطيسي للدماغ (MRI Brain Scan). يرجى التأكد من رفع صورة MRI واضحة وعالية الجودة لتحليل دقيق",
+        "invalid_image_details": "الصورة التي تم رفعها أو التقاطها ليست واضحة أو ليست صورة رنين مغناطيسي للدماغ (MRI Brain Scan). ي[...]",
         "developer_credit": "Developed by Erinov AI Club",
         "about_title":  "حول التقنية المستخدمة",
         "about_text": "يعتمد التطبيق على خوارزميات التعلم العميق (Deep Learning) وبالتحديد الشبكات العصبية التلافيفية (CNN)",
@@ -76,7 +76,7 @@ MESSAGES = {
 CUSTOM_CSS = """
 <style>
 #MainMenu, footer {visibility: hidden;}
-. stApp {
+.stApp {
     background-color: #ffffff;
     color: #212529;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -89,7 +89,7 @@ h1 {
     font-size: 3em;
     margin-bottom: 10px;
 }
-.intro-box {
+. intro-box {
     background:  linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     padding: 30px;
     border-radius:  15px;
@@ -101,7 +101,7 @@ h1 {
     line-height: 1.6;
     color: #212529;
 }
-.footer {
+. footer {
     position: fixed;
     left: 0;
     bottom:  0;
@@ -110,21 +110,28 @@ h1 {
     color: #6c757d;
     text-align: center;
     padding: 8px;
-    font-size: 0.85em;
+    font-size:  0.85em;
     border-top: 1px solid #e9ecef;
     z-index: 1000;
 }
-.rtl-text {
+. rtl-text {
     direction: rtl;
     text-align: right;
     color: #212529;
 }
 
+/* File uploader - Browse files button in red */
+[data-testid="stFileUploader"] label {
+    color: #ff0000 !important;
+}
+
 /* result-specific colors (kept, but global color will apply to most text) */
-.result-yes { color: #dc3545; }   /* red for tumor */
-. result-no  { color: #28a745; }   /* green for clear */
-.result-invalid { color: #ff9800; } /* orange for invalid */
-.invalid-details { color: #ff0000; font-weight: 600; } /* red for invalid details */
+.result-yes { color: #dc3545; }
+.result-no { color: #28a745; }
+.result-invalid { color: #ff9800; }
+.result-header-yes { color: #dc3545; }
+.result-header-no { color: #28a745; }
+.invalid-details { color: #ff0000; font-weight: 600; }
 </style>
 """
 
@@ -142,7 +149,7 @@ def load_model_and_labels():
         if not class_names:
             class_names = ["Yes Have a Tumor in Brain Scan", "No Tumor in Brain Scan", "Not MRI Scan"]
         return model, class_names
-    except Exception as e: 
+    except Exception as e:
         st.error(f"Error loading model:  {e}")
         st.stop()
 
@@ -192,7 +199,7 @@ def main():
         st.markdown("""
 - Walid Tahkoubit
 - Dalia
-- B. Mohamed 
+- B.  Mohamed 
 - Omar Slimen
 - B. Lokman
 - Omar
@@ -204,7 +211,7 @@ def main():
     st.markdown(f'<div class="intro-box {"rtl-text" if lang == "ar" else ""}"> {msg["intro_text"]} </div>', unsafe_allow_html=True)
 
     if lang == 'ar':
-        st.markdown('<div class="rtl-text">', unsafe_allow_html=True)
+        st. markdown('<div class="rtl-text">', unsafe_allow_html=True)
     
     uploaded_file = None
     if st.session_state.input_mode_key == 'upload':
@@ -224,22 +231,22 @@ def main():
                 class_name = class_names[index]
                 confidence = prediction[0][index]
 
-                st.header(msg["result_header"])
-
                 if "Yes Have a Tumor in Brain Scan" in class_name: 
+                    st.markdown(f'<h2 class="result-header-yes">{msg["result_header"]}</h2>', unsafe_allow_html=True)
                     st.markdown(f'<h3 class="result-yes">{msg["result_yes_title"]}</h3>', unsafe_allow_html=True)
                     st.write(msg["result_yes_text"])
                     st.write(f"**Confidence Score:** {confidence*100:.2f}%")
                 elif "No Tumor in Brain Scan" in class_name:
+                    st.markdown(f'<h2 class="result-header-no">{msg["result_header"]}</h2>', unsafe_allow_html=True)
                     st.markdown(f'<h3 class="result-no">{msg["result_no_title"]}</h3>', unsafe_allow_html=True)
                     st.write(msg["result_no_text"])
-                    st.write(f"**Confidence Score:** {confidence*100:. 2f}%")
+                    st.write(f"**Confidence Score:** {confidence*100:.2f}%")
                 elif "Not MRI Scan" in class_name:
                     # Display the invalid image details in red and respect Arabic RTL when needed
                     st.markdown(f'<h3 class="result-invalid">{msg["invalid_image_msg"]}</h3>', unsafe_allow_html=True)
-                    if lang == 'ar': 
+                    if lang == 'ar':
                         st.markdown(
-                            f'<p class="invalid-details" style="direction:  rtl; text-align:  right;">{msg["invalid_image_details"]}</p>',
+                            f'<p class="invalid-details" style="direction: rtl; text-align:  right;">{msg["invalid_image_details"]}</p>',
                             unsafe_allow_html=True
                         )
                     else: 
@@ -247,7 +254,7 @@ def main():
                             f'<p class="invalid-details">{msg["invalid_image_details"]}</p>',
                             unsafe_allow_html=True
                         )
-                else:
+                else: 
                     st.error(msg["invalid_image_msg"])
             except Exception as e:
                 st.error(f"Error during analysis: {e}")
@@ -256,5 +263,5 @@ def main():
         st.markdown('</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="footer">{msg["developer_credit"]}</div>', unsafe_allow_html=True)
 
-if __name__ == "__main__":
+if __name__ == "__main__": 
     main()
