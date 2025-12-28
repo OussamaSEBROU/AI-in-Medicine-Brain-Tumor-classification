@@ -14,7 +14,7 @@ IMAGE_SIZE = (224, 224)
 MESSAGES = {
     "en": {
         "app_title": "AI NeuroScan",
-        "intro_text": "Welcome to AI NeuroScan - a cutting-edge artificial intelligence platform dedicated to advanced preliminary analysis of brain MRI scans. Our system leverages state-of-the-art Deep Learning technology and Convolutional Neural Networks (CNN) trained on thousands of verified medical images from leading medical institutions. This platform has been developed as an assistive preliminary screening tool, providing rapid and accurate analysis that complements - not replaces - specialized medical diagnosis. We aim to support early detection of brain abnormalities by delivering reliable preliminary results that assist physicians and patients in making informed medical decisions. Our platform is committed to the highest standards of accuracy, reliability, and ethical AI application in medical imaging analysis. This technology represents a significant advancement in making preliminary brain MRI screening more accessible while maintaining professional medical oversight.",
+        "intro_text": "Welcome to AI NeuroScan. Experience the future of neuroimaging with our state-of-the-art AI screening tool. Using advanced Convolutional Neural Networks, we provide rapid, preliminary MRI analysis to assist in the early detection of brain abnormalities and support informed medical decision-making",
         "subtitle": "Advanced Brain MRI Analysis - Leveraging AI for early, non-invasive screening. Precision in every pixel.",
         "sidebar_title": "Settings & Information",
         "language_label": "Select Language",
@@ -145,7 +145,7 @@ def main():
         
         if lang == 'ar':
             st.markdown("""
-            **فريق التطوير:**
+            
             - Walid Tahkoubit
             - Dalia
             - B. Mohamed 
@@ -157,11 +157,11 @@ def main():
             
             **تحت إشراف:**
             
-            **Oussama SEBROU** 🎓
+            *M. Oussama SEBROU*
             """)
         else:
             st.markdown("""
-            **Development Team:**
+            
             - Walid Tahkoubit
             - Dalia
             - B. Mohamed 
